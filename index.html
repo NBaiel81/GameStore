@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
+        .navbar img { height: 40px; }
+        .navbar .icons { display: flex; gap: 15px; }
+        .section { padding: 20px; }
+        .section h2 { font-size: 24px; margin-bottom: 10px; }
+        .carousel { position: relative; max-width: 800px; margin: 0 auto; }
+        .carousel-item { display: none; text-align: center; }
+        .carousel-item.active { display: block; }
+        .carousel img { width: 100%; height: 300px; object-fit: cover; }
+        .carousel .price { font-weight: bold; }
+        .carousel .rating { color: gold; }
+        .carousel .review { font-style: italic; }
+        .carousel button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; cursor: pointer; }
+        .carousel button.prev { left: 0; }
+        .carousel button.next { right: 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .card { border: 1px solid #ddd; padding: 10px; text-align: center; background: #fff; }
+        .card img { width: 100%; height: 150px; object-fit: cover; }
+        .card h4 { font-size: 16px; margin: 10px 0 5px; }
+        .card p { margin: 5px 0; }
+        .more-btn { display: block; text-align: right; margin-top: 10px; }
+        .more-btn a { color: blue; text-decoration: underline; }
+        .columns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="logo.png" alt="Logo">
+        <div class="icons">
+            <span>🔍</span>
+            <span>🔔</span>
+            <span>👤</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="grid">
+            <div class="card">
+                <a href="store.html?category=On Sale">
+                    <img src="sale_ad.jpg" alt="Sale Ad">
+                    <h4>Sale Ad</h4>
+                </a>
+            </div>
+            <div class="card">
+                <a href="store.html?category=New">
+                    <img src="new_release.jpg" alt="New Release">
+                    <h4>New Release</h4>
+                </a>
+            </div>
+            <div class="card">
+                <a href="store.html?sort=bestSeller">
+                    <img src="best_selling.jpg" alt="Best Selling">
+                    <h4>Best Selling</h4>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Games Tailored to Your Taste</h2>
+        <div class="carousel">
+            <div class="carousel-item active">
+                <a href="game.html?id=game0">
+                    <img src="tailored_game1.jpg" alt="Game 1">
+                    <h4>Action Adventure</h4>
+                    <p class="price">$29.99</p>
+                    <p class="rating">★★★★★</p>
+                    <p class="review">Thrilling gameplay!</p>
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="game.html?id=game2">
+                    <img src="tailored_game2.jpg" alt="Game 2">
+                    <h4>Space RPG</h4>
+                    <p class="price">$39.99</p>
+                    <p class="rating">★★★★☆</p>
+                    <p class="review">Epic story!</p>
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="game.html?id=game1">
+                    <img src="tailored_game3.jpg" alt="Game 3">
+                    <h4>Puzzle Quest</h4>
+                    <p class="price">$19.99</p>
+                    <p class="rating">★★★★☆</p>
+                    <p class="review">Mind-bending fun!</p>
+                </a>
+            </div>
+            <button class="prev">Prev Game</button>
+            <button class="next">Next Game</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Bundles</h2>
+        <div class="grid">
+            <div class="card">
+                <a href="bundle.html?id=bundle1">
+                    <img src="bundle1.jpg" alt="Bundle 1">
+                    <h4>Strategy Pack</h4>
+                    <p>$49.99</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="bundle.html?id=bundle2">
+                    <img src="bundle2.jpg" alt="Bundle 2">
+                    <h4>Horror Collection</h4>
+                    <p>$39.99</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="bundle.html?id=bundle3">
+                    <img src="bundle3.jpg" alt="Bundle 3">
+                    <h4>Indie Gems</h4>
+                    <p>$29.99</p>
+                </a>
+            </div>
+        </div>
+        <div class="more-btn">
+            <a href="store.html?category=Bundles&exclude=Games">More</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Games</h2>
+        <div class="grid">
+            <div class="card">
+                <a href="game.html?id=game10">
+                    <img src="similar_game1.jpg" alt="Game 1">
+                    <h4>Racing Mania</h4>
+                    <p>PC</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="game.html?id=game8">
+                    <img src="similar_game2.jpg" alt="Game 2">
+                    <h4>Stealth Ops</h4>
+                    <p>PC</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="game.html?id=game9">
+                    <img src="similar_game3.jpg" alt="Game 3">
+                    <h4>Fantasy Quest</h4>
+                    <p>Xbox</p>
+                </a>
+            </div>
+        </div>
+        <div class="more-btn">
+            <a href="store.html?category=Games&exclude=Bundles">More</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="columns">
+            <div>
+                <h2>Best Reviewed Games</h2>
+                <div class="card">
+                    <a href="game.html?id=game7">
+                        <h4>Horror Survival Game</h4>
+                        <p>★★★★★ (95/100)</p>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="game.html?id=game8">
+                        <h4>Fantasy Action Game</h4>
+                        <p>★★★★★ (90/100)</p>
+                    </a>
+                </div>
+                <div class="more-btn">
+                    <a href="store.html?sort=bestSeller&category=Games&exclude=Bundles">More</a>
+                </div>
+            </div>
+            <div>
+                <h2>Top Bundles</h2>
+                <div class="card">
+                    <a href="bundle.html?id=bundle1">
+                        <h4>Bundle for PC games</h4>
+                        <p>$40.00</p>
+                    </a>
+                </div>
+                <div class="more-btn">
+                    <a href="store.html?category=Bundles&exclude=Games">More</a>
+                </div>
+            </div>
+            <div>
+                <h2>Most Played Games</h2>
+                <div class="card">
+                    <a href="game.html?id=game10">
+                        <h4>Multiplayer Shooter</h4>
+                        <p>PS</p>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="game.html?id=game5">
+                        <h4>Rhythm Music Game</h4>
+                        <p>PS</p>
+                    </a>
+                </div>
+                <div class="more-btn">
+                    <a href="store.html?sort=bestSeller&category=Games&exclude=Bundles">More</a>
+                </div>
+            </div>
+            <div>
+                <h2>New Releases</h2>
+                <div class="card">
+                    <a href="game.html?id=game0">
+                        <h4>Strategy Game for PC</h4>
+                        <p>PC</p>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="game.html?id=game9">
+                        <h4>Indie Platformer</h4>
+                        <p>PC</p>
+                    </a>
+                </div>
+                <div class="more-btn">
+                    <a href="store.html?category=New&category=Games&exclude=Bundles">More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { data } from './data.js';
+
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        let currentIndex = 0;
+
+        function showCarouselItem(index) {
+            carouselItems.forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+        }
+
+        document.querySelector('.carousel .prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+            showCarouselItem(currentIndex);
+        });
+
+        document.querySelector('.carousel .next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % carouselItems.length;
+            showCarouselItem(currentIndex);
+        });
+    </script>
+</body>
+</html>
