@@ -9,7 +9,14 @@
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
         .navbar img { height: 40px; }
-        .navbar .icons { display: flex; gap: 15px; }
+        .navbar .icons { display: flex; gap: 15px; align-items: center; }
+        .search-container { position: relative; }
+        .search-container input { padding: 5px; width: 200px; }
+        .search-results { position: absolute; top: 100%; left: 0; width: 200px; background: white; border: 1px solid #ddd; max-height: 200px; overflow-y: auto; display: none; z-index: 10; }
+        .search-results div { padding: 5px; cursor: pointer; }
+        .search-results div:hover { background: #f0f0f0; }
+        .search-results .no-matches { color: #888; cursor: default; }
+        .search-results .no-matches:hover { background: none; }
         .container { padding: 20px; }
         .header { display: flex; gap: 20px; margin-bottom: 20px; }
         .header-video img { width: 400px; height: 225px; object-fit: cover; }
@@ -38,7 +45,10 @@
             <img src="logo.png" alt="Logo">
         </a>
         <div class="icons">
-            <span>🔍</span>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search games...">
+                <div class="search-results" id="search-results"></div>
+            </div>
             <span>🔔</span>
             <span>👤</span>
         </div>
@@ -89,6 +99,48 @@
     <script type="module">
         import { data } from './data.js';
 
+        const searchBar = document.getElementById('search-bar');
+        const searchResults = document.getElementById('search-results');
+
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase();
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+
+            if (query) {
+                const matches = data.games.filter(game => game.name.toLowerCase().includes(query));
+                if (matches.length > 0) {
+                    matches.forEach(game => {
+                        const result = document.createElement('div');
+                        result.textContent = game.name;
+                        result.addEventListener('click', () => {
+                            window.location.href = `game.html?id=${game.id}`;
+                        });
+                        searchResults.appendChild(result);
+                    });
+                    searchResults.style.display = 'block';
+                } else {
+                    const noMatches = document.createElement('div');
+                    noMatches.className = 'no-matches';
+                    noMatches.textContent = 'No matches';
+                    searchResults.appendChild(noMatches);
+                    searchResults.style.display = 'block';
+                }
+            }
+        });
+
+        searchBar.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchResults.style.display = 'none';
+            }, 200);
+        });
+
+        searchBar.addEventListener('focus', () => {
+            if (searchBar.value) {
+                searchResults.style.display = 'block';
+            }
+        });
+
         const urlParams = new URLSearchParams(window.location.search);
         const gameId = urlParams.get('id') || 'game0'; // Default to first game if no ID
         const game = data.games.find(g => g.id === gameId);
@@ -116,7 +168,7 @@
             // Timer
             if (game.timer && game.isSale) {
                 const endTime = new Date(game.discountTime);
-                const now = new Date('2025-06-02T06:33:00-05:00'); // Current date/time as provided
+                const now = new Date('2025-06-03T22:12:00-05:00'); // Current date/time as provided
                 const timeLeft = endTime - now;
                 if (timeLeft > 0) {
                     const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));

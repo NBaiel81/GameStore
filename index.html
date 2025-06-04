@@ -6,251 +6,1071 @@
     <title>Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
-        .navbar img { height: 40px; }
-        .navbar .icons { display: flex; gap: 15px; }
-        .section { padding: 20px; }
-        .section h2 { font-size: 24px; margin-bottom: 10px; }
-        .carousel { position: relative; max-width: 800px; margin: 0 auto; }
-        .carousel-item { display: none; text-align: center; }
-        .carousel-item.active { display: block; }
-        .carousel img { width: 100%; height: 300px; object-fit: cover; }
-        .carousel .price { font-weight: bold; }
-        .carousel .rating { color: gold; }
-        .carousel .review { font-style: italic; }
-        .carousel button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; cursor: pointer; }
-        .carousel button.prev { left: 0; }
-        .carousel button.next { right: 0; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .card { border: 1px solid #ddd; padding: 10px; text-align: center; background: #fff; }
-        .card img { width: 100%; height: 150px; object-fit: cover; }
-        .card h4 { font-size: 16px; margin: 10px 0 5px; }
-        .card p { margin: 5px 0; }
-        .more-btn { display: block; text-align: right; margin-top: 10px; }
-        .more-btn a { color: blue; text-decoration: underline; }
-        .columns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        /* Global Reset & Variables */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-primary: #1e40af;      /* dark blue */
+            --color-secondary: #2563eb;    /* medium blue */
+            --color-accent: #facc15;       /* amber */
+            --color-gray-100: #f3f4f6;     /* light gray */
+            --color-gray-200: #e5e7eb;     /* gray */
+            --color-gray-700: #374151;     /* dark gray */
+            --color-white: #ffffff;
+            --color-black: #000000;        /* black */
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --radius: 4px;
+            --transition: 0.2s ease-in-out;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--color-gray-700);
+            background-color: var(--color-gray-100);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--color-black);
+            border-bottom: 1px solid var(--color-gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.75rem 1rem;
+        }
+
+        .navbar__inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar__logo img {
+            height: 40px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            margin: 0 1rem;
+        }
+
+        .search-container input {
+            padding: 0.35rem 0.5rem;
+            width: 100%;
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color var(--transition);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+        }
+
+        .search-results div {
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .search-results div:hover {
+            background: var(--color-gray-200);
+        }
+
+        .search-results .no-matches {
+            color: var(--color-gray-700);
+            cursor: default;
+        }
+
+        .search-results .no-matches:hover {
+            background: none;
+        }
+
+        .navbar__actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .navbar__action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem;
+            background: none;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition);
+        }
+
+        .navbar__action-btn:hover,
+        .navbar__action-btn:focus {
+            background-color: var(--color-gray-200);
+            outline: none;
+        }
+
+        .navbar__action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--color-white); /* Changed to white */
+        }
+
+        /* Layout: Sidebar + Main Content */
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 200px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                display: block;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            padding: 1rem;
+            position: sticky;
+            top: 4rem; /* height of navbar */
+            align-self: start;
+        }
+
+        .sidebar__heading {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-primary);
+        }
+
+        .filter {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter__title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-secondary);
+        }
+
+        .filter__list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .filter__list a {
+            display: block;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.95rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        .filter__list a:hover,
+        .filter__list a:focus {
+            background-color: var(--color-gray-100);
+            color: var(--color-primary);
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Top Cards (Sale, New Release, Best Selling) */
+        .cards {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .cards--top {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Three-column layout for the columns section */
+        .cards--columns {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            .cards--columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card__title {
+            background-color: var(--color-gray-100);
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-gray-700);
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .card__content {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card__content img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .card__content div {
+            flex: 1;
+            text-align: center;
+        }
+
+        .card__content h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .card__content p {
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        /* Tailored Section */
+        .tailored-section {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .tailored {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+
+        .game-display {
+            position: relative;
+            width: 100%;
+            max-width: 575px;
+            margin: 0 auto;
+        }
+
+        .game-item {
+            display: none;
+        }
+
+        .game-item.active {
+            display: block;
+        }
+
+        .game-display__poster {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius);
+        }
+
+        .game-display__controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 0.75rem;
+            border-bottom-left-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+
+        .game-display__nav {
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            transition: color var(--transition), background-color var(--transition);
+            border-radius: var(--radius);
+        }
+
+        .game-display__nav:hover,
+        .game-display__nav:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .game-display__price {
+            color: var(--color-white);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .tailored__reviews {
+            background-color: var(--color-gray-100);
+            border-radius: var(--radius);
+            padding: 0.75rem;
+        }
+
+        .reviews__heading {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-secondary);
+        }
+
+        .reviews-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .reviews-slides-wrapper {
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+        }
+
+        .reviews-slides {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            height: 90%;
+        }
+
+        .review {
+            position: relative;
+            flex: 0 0 100%;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            height: 100;
+            display: none;
+        }
+
+        .review.active {
+            display: block;
+        }
+
+        .review__text {
+            font-size: 0.95rem;
+            color: var(--color-gray-700);
+        }
+
+        .review__score {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .reviews-nav {
+            background-color: var(--color-secondary);
+            border: none;
+            color: var(--color-white);
+            font-size: 1.25rem;
+            padding: 0.5rem;
+            margin-bottom: 3rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .reviews-nav:hover,
+        .reviews-nav:focus {
+            background-color: var(--color-primary);
+            outline: none;
+        }
+
+        .reviews-nav--prev,
+        .reviews-nav--next {
+            flex: 0 0 auto;
+        }
+
+        .reviews-nav--prev {
+            margin-right: 0.5rem;
+        }
+
+        .reviews-nav--next {
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 500px) {
+            .reviews-nav {
+                font-size: 1rem;
+                padding: 0.4rem;
+            }
+            .review {
+                margin: 0 0.25rem;
+                padding: 0.5rem;
+            }
+        }
+
+        /* Bundles Section */
+        .bundles-section {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+
+        .bundles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .bundle-card {
+            background-color: var(--color-gray-100);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition);
+        }
+
+        .bundle-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .bundle-card__image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .bundle-card__name {
+            padding: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-gray-700);
+            text-align: center;
+        }
+
+        .bundles__view-more {
+            text-align: right;
+            margin-top: 1rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition), color var(--transition);
+            text-decoration: none;
+            border: none;
+        }
+
+        .button--primary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .button--primary:hover,
+        .button--primary:focus {
+            background-color: var(--color-primary);
+            outline: none;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-gray-200);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--color-gray-700);
+            margin-top: 2rem;
+        }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
     <div class="navbar">
-        <img src="logo.png" alt="Logo">
-        <div class="icons">
-            <span>🔍</span>
-            <span>🔔</span>
-            <span>👤</span>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="grid">
-            <div class="card">
-                <a href="store.html?category=On Sale">
-                    <img src="sale_ad.jpg" alt="Sale Ad">
-                    <h4>Sale Ad</h4>
-                </a>
+        <div class="navbar__inner">
+            <a href="index.html" class="navbar__logo">
+                <img src="images/gamestore.jpg" alt="Logo">
+            </a>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search games...">
+                <div class="search-results" id="search-results"></div>
             </div>
-            <div class="card">
-                <a href="store.html?category=New">
-                    <img src="new_release.jpg" alt="New Release">
-                    <h4>New Release</h4>
-                </a>
-            </div>
-            <div class="card">
-                <a href="store.html?sort=bestSeller">
-                    <img src="best_selling.jpg" alt="Best Selling">
-                    <h4>Best Selling</h4>
-                </a>
+            <div class="navbar__actions">
+                <button class="navbar__action-btn" aria-label="View Cart" onclick="window.location.href='cart.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0021 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
+                <button class="navbar__action-btn" aria-label="View Profile" onclick="window.location.href='profile.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
 
-    <div class="section">
-        <h2>Games Tailored to Your Taste</h2>
-        <div class="carousel">
-            <div class="carousel-item active">
-                <a href="game.html?id=game0">
-                    <img src="tailored_game1.jpg" alt="Game 1">
-                    <h4>Action Adventure</h4>
-                    <p class="price">$29.99</p>
-                    <p class="rating">★★★★★</p>
-                    <p class="review">Thrilling gameplay!</p>
-                </a>
-            </div>
-            <div class="carousel-item">
-                <a href="game.html?id=game2">
-                    <img src="tailored_game2.jpg" alt="Game 2">
-                    <h4>Space RPG</h4>
-                    <p class="price">$39.99</p>
-                    <p class="rating">★★★★☆</p>
-                    <p class="review">Epic story!</p>
-                </a>
-            </div>
-            <div class="carousel-item">
-                <a href="game.html?id=game1">
-                    <img src="tailored_game3.jpg" alt="Game 3">
-                    <h4>Puzzle Quest</h4>
-                    <p class="price">$19.99</p>
-                    <p class="rating">★★★★☆</p>
-                    <p class="review">Mind-bending fun!</p>
-                </a>
-            </div>
-            <button class="prev">Prev Game</button>
-            <button class="next">Next Game</button>
-        </div>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar (Unchanged) -->
+        <aside class="sidebar">
+            <h2 class="sidebar__heading">Categories</h2>
+
+            <!-- Price Section -->
+            <section class="filter">
+                <h3 class="filter__title">Price</h3>
+                <ul class="filter__list">
+                    <li><a href="store.html?price=u10">< $10</a></li>
+                    <li><a href="store.html?price=u20">< $20</a></li>
+                    <li><a href="store.html?price=u30">< $30</a></li>
+                    <li><a href="store.html?price=u40">< $40</a></li>
+                </ul>
+            </section>
+
+            <!-- Genres Section -->
+            <section class="filter">
+                <h3 class="filter__title">Genres</h3>
+                <ul class="filter__list">
+                    <li><a href="store.html?genre=Horror">Horror</a></li>
+                    <li><a href="store.html?genre=RPG">RPG</a></li>
+                    <li><a href="store.html?genre=Strategy">Strategy</a></li>
+                    <li><a href="store.html?genre=FPS">FPS</a></li>
+                </ul>
+            </section>
+
+            <!-- Platform Section -->
+            <section class="filter">
+                <h3 class="filter__title">Platform</h3>
+                <ul class="filter__list">
+                    <li><a href="store.html?platform=Windows">PC</a></li>
+                    <li><a href="store.html?platform=PlayStation">PlayStation</a></li>
+                    <li><a href="store.html?platform=Xbox">Xbox</a></li>
+                    <li><a href="store.html?platform=Nintendo">Switch</a></li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Cards -->
+            <section class="cards cards--top">
+                <div class="card card--large">
+                    <h3 class="card__title">Sale Ad</h3>
+                    <div class="card__content">
+                        <a href="store.html?category=On Sale">
+                            <img src="sale_ad.jpg" alt="Sale Ad">
+                        </a>
+                    </div>
+                </div>
+                <div class="card card--large">
+                    <h3 class="card__title">New Release</h3>
+                    <div class="card__content">
+                        <a href="store.html?category=New">
+                            <img src="new_release.jpg" alt="New Release">
+                        </a>
+                    </div>
+                </div>
+                <div class="card card--large">
+                    <h3 class="card__title">Best Selling</h3>
+                    <div class="card__content">
+                        <a href="store.html?sort=bestSeller">
+                            <img src="best_selling.jpg" alt="Best Selling">
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Games Tailored to Your Taste Section -->
+            <section class="tailored-section">
+                <h2 class="section-title">Games Tailored to Your Taste</h2>
+                <div class="tailored">
+                    <div class="tailored__carousel">
+                        <div class="game-display" id="game-display">
+                            <!-- Game 1: Horror Survival Game for PS -->
+                            <div class="game-item active">
+                                <a href="game.html?id=game7" class="game-display__link">
+                                    <img src="images/horror.jpg" alt="Horror Survival Game for PS" class="game-display__poster">
+                                </a>
+                                <div class="game-display__controls">
+                                    <button class="game-display__nav game-display__nav--prev" aria-label="Previous game">◀</button>
+                                    <div class="game-display__price">$24.00</div>
+                                    <button class="game-display__nav game-display__nav--next" aria-label="Next game">▶</button>
+                                </div>
+                            </div>
+                            <!-- Game 2: Fantasy Action Game for Xbox -->
+                            <div class="game-item">
+                                <a href="game.html?id=game8" class="game-display__link">
+                                    <img src="images/fantasy01.jpg" alt="Fantasy Action Game for Xbox" class="game-display__poster">
+                                </a>
+                                <div class="game-display__controls">
+                                    <button class="game-display__nav game-display__nav--prev" aria-label="Previous game">◀</button>
+                                    <div class="game-display__price">$40.00</div>
+                                    <button class="game-display__nav game-display__nav--next" aria-label="Next game">▶</button>
+                                </div>
+                            </div>
+                            <!-- Game 3: Sci-Fi RPG Game for Xbox -->
+                            <div class="game-item">
+                                <a href="game.html?id=game2" class="game-display__link">
+                                    <img src="images/RPG.jpg" alt="Sci-Fi RPG Game for Xbox" class="game-display__poster">
+                                </a>
+                                <div class="game-display__controls">
+                                    <button class="game-display__nav game-display__nav--prev" aria-label="Previous game">◀</button>
+                                    <div class="game-display__price">$35.00</div>
+                                    <button class="game-display__nav game-display__nav--next" aria-label="Next game">▶</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tailored__reviews">
+                        <h3 class="reviews__heading">Community Reviews</h3>
+                        <div class="reviews-container" id="reviews-container">
+                            <button class="reviews-nav reviews-nav--prev" aria-label="Previous review">◀</button>
+                            <div class="reviews-slides-wrapper">
+                                <div class="reviews-slides" id="reviews-slides">
+                                    <!-- Comments for Game 1: Horror Survival Game for PS -->
+                                    <div class="review game7 active">
+                                        <p class="review__text">Best horror game I've played!</p>
+                                        <p class="review__score">5/5 stars</p>
+                                    </div>
+                                    <div class="review game7">
+                                        <p class="review__text">Creepy and immersive.</p>
+                                        <p class="review__score">4/5 stars</p>
+                                    </div>
+                                    <!-- Comments for Game 2: Fantasy Action Game for Xbox -->
+                                    <div class="review game8">
+                                        <p class="review__text">Loved the combat system!</p>
+                                        <p class="review__score">5/5 stars</p>
+                                    </div>
+                                    <div class="review game8">
+                                        <p class="review__text">Great story and characters.</p>
+                                        <p class="review__score">4/5 stars</p>
+                                    </div>
+                                    <!-- Comments for Game 3: Sci-Fi RPG Game for Xbox -->
+                                    <div class="review game2">
+                                        <p class="review__text">Incredible story and visuals!</p>
+                                        <p class="review__score">5/5 stars</p>
+                                    </div>
+                                    <div class="review game2">
+                                        <p class="review__text">Loved the branching storylines.</p>
+                                        <p class="review__score">4/5 stars</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="reviews-nav reviews-nav--next" aria-label="Next review">▶</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bundles Section -->
+            <section class="bundles-section">
+                <h2 class="section-title">Bundles</h2>
+                <div class="bundles">
+                    <div class="bundle-card">
+                        <a href="bundle.html?id=bundle1">
+                            <div class="bundle-card__image">
+                                <img src="images/strategybundle.jpg" alt="Bundle 1">
+                            </div>
+                            <h3 class="bundle-card__name">Strategy Pack</h3>
+                        </a>
+                    </div>
+                    <div class="bundle-card">
+                        <a href="bundle.html?id=bundle2">
+                            <div class="bundle-card__image">
+                                <img src="images/horrorbundle.jpg" alt="Bundle 2">
+                            </div>
+                            <h3 class="bundle-card__name">Horror Collection</h3>
+                        </a>
+                    </div>
+                    <div class="bundle-card">
+                        <a href="bundle.html?id=bundle3">
+                            <div class="bundle-card__image">
+                                <img src="images/indiebundle.jpg" alt="Bundle 3">
+                            </div>
+                            <h3 class="bundle-card__name">Indie Gems</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="bundles__view-more">
+                    <a href="store.html?category=Bundles&exclude=Games" class="button button--primary">View More</a>
+                </div>
+            </section>
+
+            <!-- Similar Games Section -->
+            <section class="bundles-section">
+                <h2 class="section-title">Similar Games</h2>
+                <div class="bundles">
+                    <div class="bundle-card">
+                        <a href="game.html?id=game10">
+                            <div class="bundle-card__image">
+                                <img src="images/multiplayer01.jpg" alt="Game 1">
+                            </div>
+                            <h3 class="bundle-card__name">Racing Mania</h3>
+                        </a>
+                    </div>
+                    <div class="bundle-card">
+                        <a href="game.html?id=game8">
+                            <div class="bundle-card__image">
+                                <img src="images/fantasy01.jpg" alt="Game 2">
+                            </div>
+                            <h3 class="bundle-card__name">Stealth Ops</h3>
+                        </a>
+                    </div>
+                    <div class="bundle-card">
+                        <a href="game.html?id=game9">
+                            <div class="bundle-card__image">
+                                <img src="images/platformer.jpg" alt="Game 3">
+                            </div>
+                            <h3 class="bundle-card__name">Fantasy Quest</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="bundles__view-more">
+                    <a href="store.html?category=Games&exclude=Bundles" class="button button--primary">View More</a>
+                </div>
+            </section>
+
+            <!-- Three Columns Section -->
+            <section class="bundles-section">
+                <div class="cards cards--columns">
+                    <!-- Best Reviewed Games -->
+                    <div>
+                        <h2 class="section-title">Best Reviewed Games</h2>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/horror.jpg" alt="Horror Survival Game for PS">
+                                <div>
+                                    <a href="game.html?id=game7">
+                                        <h3>Horror Survival Game for PS</h3>
+                                    </a>
+                                    <p>★★★★★</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/fantasy01.jpg" alt="Fantasy Action Game for Xbox">
+                                <div>
+                                    <a href="game.html?id=game8">
+                                        <h3>Fantasy Action Game for Xbox</h3>
+                                    </a>
+                                    <p>★★★★★</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/RPG.jpg" alt="Sci-Fi RPG Game for Xbox">
+                                <div>
+                                    <a href="game.html?id=game2">
+                                        <h3>Sci-Fi RPG Game for Xbox</h3>
+                                    </a>
+                                    <p>★★★★½</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bundles__view-more">
+                            <a href="store.html?sort=bestSeller&category=Games&exclude=Bundles" class="button button--primary">View More</a>
+                        </div>
+                    </div>
+                    <!-- Top Bundles -->
+                    <div>
+                        <h2 class="section-title">Top Bundles</h2>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/strategybundle.jpg" alt="Strategy Pack">
+                                <div>
+                                    <a href="bundle.html?id=bundle1">
+                                        <h3>Strategy Pack</h3>
+                                    </a>
+                                    <p>★★★★★</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/horrorbundle.jpg" alt="Horror Collection">
+                                <div>
+                                    <a href="bundle.html?id=bundle2">
+                                        <h3>Horror Collection</h3>
+                                    </a>
+                                    <p>★★★★½</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/indiebundle.jpg" alt="Indie Gems">
+                                <div>
+                                    <a href="bundle.html?id=bundle3">
+                                        <h3>Indie Gems</h3>
+                                    </a>
+                                    <p>★★★★½</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bundles__view-more">
+                            <a href="store.html?category=Bundles&exclude=Games" class="button button--primary">View More</a>
+                        </div>
+                    </div>
+                    <!-- Most Played Games -->
+                    <div>
+                        <h2 class="section-title">Most Played Games</h2>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/strategy01.jpg" alt="Strategy Game for PC">
+                                <div>
+                                    <a href="game.html?id=game0">
+                                        <h3>Strategy Game for PC</h3>
+                                    </a>
+                                    <p>★★★★½</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/RPG.jpg" alt="Sci-Fi RPG Game for Xbox">
+                                <div>
+                                    <a href="game.html?id=game2">
+                                        <h3>Sci-Fi RPG Game for Xbox</h3>
+                                    </a>
+                                    <p>★★★★½</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__content">
+                                <img src="images/rhythm01.jpg" alt="Rhythm Music Game for PS">
+                                <div>
+                                    <a href="game.html?id=game5">
+                                        <h3>Rhythm Music Game for PS</h3>
+                                    </a>
+                                    <p>★★★★½</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bundles__view-more">
+                            <a href="store.html?sort=bestSeller&category=Games&exclude=Bundles" class="button button--primary">View More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <div class="section">
-        <h2>Bundles</h2>
-        <div class="grid">
-            <div class="card">
-                <a href="bundle.html?id=bundle1">
-                    <img src="bundle1.jpg" alt="Bundle 1">
-                    <h4>Strategy Pack</h4>
-                    <p>$49.99</p>
-                </a>
-            </div>
-            <div class="card">
-                <a href="bundle.html?id=bundle2">
-                    <img src="bundle2.jpg" alt="Bundle 2">
-                    <h4>Horror Collection</h4>
-                    <p>$39.99</p>
-                </a>
-            </div>
-            <div class="card">
-                <a href="bundle.html?id=bundle3">
-                    <img src="bundle3.jpg" alt="Bundle 3">
-                    <h4>Indie Gems</h4>
-                    <p>$29.99</p>
-                </a>
-            </div>
-        </div>
-        <div class="more-btn">
-            <a href="store.html?category=Bundles&exclude=Games">More</a>
-        </div>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Game Store. All rights reserved.</p>
+    </footer>
 
-    <div class="section">
-        <h2>Games</h2>
-        <div class="grid">
-            <div class="card">
-                <a href="game.html?id=game10">
-                    <img src="similar_game1.jpg" alt="Game 1">
-                    <h4>Racing Mania</h4>
-                    <p>PC</p>
-                </a>
-            </div>
-            <div class="card">
-                <a href="game.html?id=game8">
-                    <img src="similar_game2.jpg" alt="Game 2">
-                    <h4>Stealth Ops</h4>
-                    <p>PC</p>
-                </a>
-            </div>
-            <div class="card">
-                <a href="game.html?id=game9">
-                    <img src="similar_game3.jpg" alt="Game 3">
-                    <h4>Fantasy Quest</h4>
-                    <p>Xbox</p>
-                </a>
-            </div>
-        </div>
-        <div class="more-btn">
-            <a href="store.html?category=Games&exclude=Bundles">More</a>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="columns">
-            <div>
-                <h2>Best Reviewed Games</h2>
-                <div class="card">
-                    <a href="game.html?id=game7">
-                        <h4>Horror Survival Game</h4>
-                        <p>★★★★★ (95/100)</p>
-                    </a>
-                </div>
-                <div class="card">
-                    <a href="game.html?id=game8">
-                        <h4>Fantasy Action Game</h4>
-                        <p>★★★★★ (90/100)</p>
-                    </a>
-                </div>
-                <div class="more-btn">
-                    <a href="store.html?sort=bestSeller&category=Games&exclude=Bundles">More</a>
-                </div>
-            </div>
-            <div>
-                <h2>Top Bundles</h2>
-                <div class="card">
-                    <a href="bundle.html?id=bundle1">
-                        <h4>Bundle for PC games</h4>
-                        <p>$40.00</p>
-                    </a>
-                </div>
-                <div class="more-btn">
-                    <a href="store.html?category=Bundles&exclude=Games">More</a>
-                </div>
-            </div>
-            <div>
-                <h2>Most Played Games</h2>
-                <div class="card">
-                    <a href="game.html?id=game10">
-                        <h4>Multiplayer Shooter</h4>
-                        <p>PS</p>
-                    </a>
-                </div>
-                <div class="card">
-                    <a href="game.html?id=game5">
-                        <h4>Rhythm Music Game</h4>
-                        <p>PS</p>
-                    </a>
-                </div>
-                <div class="more-btn">
-                    <a href="store.html?sort=bestSeller&category=Games&exclude=Bundles">More</a>
-                </div>
-            </div>
-            <div>
-                <h2>New Releases</h2>
-                <div class="card">
-                    <a href="game.html?id=game0">
-                        <h4>Strategy Game for PC</h4>
-                        <p>PC</p>
-                    </a>
-                </div>
-                <div class="card">
-                    <a href="game.html?id=game9">
-                        <h4>Indie Platformer</h4>
-                        <p>PC</p>
-                    </a>
-                </div>
-                <div class="more-btn">
-                    <a href="store.html?category=New&category=Games&exclude=Bundles">More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- JavaScript -->
     <script type="module">
         import { data } from './data.js';
 
-        const carouselItems = document.querySelectorAll('.carousel-item');
-        let currentIndex = 0;
+        const searchBar = document.getElementById('search-bar');
+        const searchResults = document.getElementById('search-results');
+        const gameDisplay = document.getElementById('game-display');
+        const reviewsSlides = document.getElementById('reviews-slides');
 
-        function showCarouselItem(index) {
-            carouselItems.forEach((item, i) => {
-                item.classList.toggle('active', i === index);
-            });
-        }
+        // Search bar functionality (Unchanged)
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase();
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
 
-        document.querySelector('.carousel .prev').addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
-            showCarouselItem(currentIndex);
+            if (query) {
+                const matches = data.games.filter(game => game.name.toLowerCase().includes(query));
+                if (matches.length > 0) {
+                    matches.forEach(game => {
+                        const result = document.createElement('div');
+                        result.textContent = game.name;
+                        result.addEventListener('click', () => {
+                            window.location.href = `game.html?id=${game.id}`;
+                        });
+                        searchResults.appendChild(result);
+                    });
+                    searchResults.style.display = 'block';
+                } else {
+                    const noMatches = document.createElement('div');
+                    noMatches.className = 'no-matches';
+                    noMatches.textContent = 'No matches';
+                    searchResults.appendChild(noMatches);
+                    searchResults.style.display = 'block';
+                }
+            }
         });
 
-        document.querySelector('.carousel .next').addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % carouselItems.length;
-            showCarouselItem(currentIndex);
+        searchBar.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchResults.style.display = 'none';
+            }, 200);
+        });
+
+        searchBar.addEventListener('focus', () => {
+            if (searchBar.value) {
+                searchResults.style.display = 'block';
+            }
+        });
+
+        // Tailored Section: Navigation for Games and Comments
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameItems = document.querySelectorAll('.game-item');
+            const reviewItems = document.querySelectorAll('.review');
+            let currentGameIndex = 0;
+
+            // Track comment indices for each game separately
+            const commentIndices = Array.from(gameItems).map(() => 0);
+
+            function updateDisplay() {
+                // Update game display
+                gameItems.forEach((item, index) => {
+                    item.classList.toggle('active', index === currentGameIndex);
+                });
+
+                // Get the current game's ID
+                const currentGameId = gameItems[currentGameIndex].querySelector('a').getAttribute('href').split('id=')[1];
+
+                // Update comment display
+                reviewItems.forEach(item => {
+                    const isCurrentGameReview = item.classList.contains(currentGameId);
+                    if (isCurrentGameReview) {
+                        const gameReviews = Array.from(reviewItems).filter(r => r.classList.contains(currentGameId));
+                        const commentIndex = commentIndices[currentGameIndex];
+                        item.classList.toggle('active', gameReviews.indexOf(item) === commentIndex);
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+
+                // Update navigation buttons
+                const currentGameReviews = Array.from(reviewItems).filter(item => item.classList.contains(currentGameId));
+                const prevCommentBtn = document.querySelector('.reviews-nav--prev');
+                const nextCommentBtn = document.querySelector('.reviews-nav--next');
+                const currentCommentIndex = commentIndices[currentGameIndex];
+                prevCommentBtn.disabled = currentCommentIndex === 0;
+                nextCommentBtn.disabled = currentCommentIndex === currentGameReviews.length - 1;
+            }
+
+            gameDisplay.addEventListener('click', (e) => {
+                if (e.target.classList.contains('game-display__nav--prev')) {
+                    currentGameIndex = (currentGameIndex - 1 + gameItems.length) % gameItems.length;
+                    updateDisplay();
+                } else if (e.target.classList.contains('game-display__nav--next')) {
+                    currentGameIndex = (currentGameIndex + 1) % gameItems.length;
+                    updateDisplay();
+                }
+            });
+
+            document.querySelector('.reviews-nav--prev').addEventListener('click', () => {
+                if (commentIndices[currentGameIndex] > 0) {
+                    commentIndices[currentGameIndex]--;
+                    updateDisplay();
+                }
+            });
+
+            document.querySelector('.reviews-nav--next').addEventListener('click', () => {
+                const currentGameId = gameItems[currentGameIndex].querySelector('a').getAttribute('href').split('id=')[1];
+                const currentGameReviews = Array.from(reviewItems).filter(item => item.classList.contains(currentGameId));
+                if (commentIndices[currentGameIndex] < currentGameReviews.length - 1) {
+                    commentIndices[currentGameIndex]++;
+                    updateDisplay();
+                }
+            });
+
+            updateDisplay();
         });
     </script>
 </body>

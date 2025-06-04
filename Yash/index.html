@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home page</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <!-- NAVIGATION BAR -->
+        <header class="navbar">
+            <div class="navbar__inner">
+                <a href="#" class="navbar__logo">LOGO</a>
+                <!-- Main Navigation Buttons -->
+                <nav class="navbar__nav">
+                    <ul class="navbar__menu">
+                        <li class="navbar__item">
+                            <a href="#" class="navbar__link">Sale</a>
+                            <!-- href placeholder -->
+                        </li>
+                        <li class="navbar__item">
+                            <a href="#" class="navbar__link">New</a>
+                            <!-- href placeholder -->
+                        </li>
+                        <li class="navbar__item">
+                            <a href="#" class="navbar__link">Bundles</a>
+                            <!-- href placeholder -->
+                        </li>
+                        <li class="navbar__item">
+                            <a href="#" class="navbar__link">Games</a>
+                            <!-- href placeholder -->
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Search & Profile & Notifications (right) -->
+                <div class="navbar__actions">
+                    <!-- Search (icon + input) -->
+                    <button class="navbar__search-button"
+                        aria-label="Open search">
+                        <img
+                            src="/images/magnifying-glass.png"
+                            alt="Search"
+                            class="navbar__search-icon" />
+                    </button>
+                    <input
+                        type="text"
+                        class="navbar__search-input"
+                        placeholder="Search games..."
+                        aria-label="Search games" />
+
+                    <!-- Notification container -->
+                    <div class="notif-container">
+                        <!-- Bell button (click to toggle dropdown) -->
+                        <button id="notifBtn" class="navbar__notif-button"
+                            aria-label="Notifications">
+                            <img
+                                src="/images/ringing.png"
+                                alt="Notifications"
+                                class="navbar__notif-icon" />
+                            <span class="navbar__notif-badge">1</span>
+                        </button>
+
+                        <!-- Hidden dropdown: becomes visible when “.show” is added -->
+                        <div id="notifDropdown" class="notif-dropdown">
+                            <ul class="notif-list">
+                                <li class="notif-item">Your order has
+                                    shipped</li>
+                                <li class="notif-item">New message from
+                                    Alice</li>
+                                <li class="notif-item">Update available</li>
+                                <li class="notif-item notif-item--view-all">
+                                    View all notifications
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Profile picture -->
+                    <a href="#" class="navbar__profile"
+                        aria-label="User profile">
+                        <img
+                            src="/images/profile-user.png"
+                            alt="Profile"
+                            class="navbar__profile-pic" />
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- =========================
+       MAIN CONTENT
+       ========================= -->
+        <div class="container">
+            <!-- ===== SIDEBAR (FILTERS) ===== -->
+            <aside class="sidebar">
+                <h2 class="sidebar__heading">Categories (Filters)</h2>
+
+                <!-- Price Filter -->
+                <section class="filter">
+                    <h3 class="filter__title">Price</h3>
+                    <ul class="filter__list">
+                        <li>
+                            <label>
+                                <input type="radio" name="price" value="10" />
+                                &lt; $10
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="price" value="20" />
+                                &lt; $20
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="price" value="30" />
+                                &lt; $30
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="price" value="40" />
+                                &lt; $40
+                            </label>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Genres Filter -->
+                <section class="filter">
+                    <h3 class="filter__title">Genres</h3>
+                    <ul class="filter__list">
+                        <li>
+                            <label>
+                                <input type="checkbox" name="genre"
+                                    value="horror" />
+                                Horror
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="genre"
+                                    value="rpg" />
+                                RPG
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="genre"
+                                    value="strategy" />
+                                Strategy
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="genre"
+                                    value="fps" />
+                                FPS
+                            </label>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Platform Filter -->
+                <section class="filter">
+                    <h3 class="filter__title">Platform</h3>
+                    <ul class="filter__list">
+                        <li>
+                            <label>
+                                <input type="checkbox" name="platform"
+                                    value="pc" />
+                                PC
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="platform"
+                                    value="ps" />
+                                PlayStation
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="platform"
+                                    value="xbox" />
+                                Xbox
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="checkbox" name="platform"
+                                    value="switch" />
+                                Switch
+                            </label>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="filter">
+                    <h3 class="filter__title">Ratings</h3>
+
+                    <div class="filter__rating-range">
+                        <!-- Minimum Rating Input -->
+                        <label class="filter__label">
+                            From:
+                            <input
+                                type="number"
+                                name="rating-min"
+                                id="ratingMin"
+                                class="filter__input"
+                                min="1"
+                                max="10"
+                                value="1"
+                                aria-label="Minimum rating" />
+                        </label>
+
+                        <!-- Maximum Rating Input -->
+                        <label class="filter__label">
+                            To:
+                            <input
+                                type="number"
+                                name="rating-max"
+                                id="ratingMax"
+                                class="filter__input"
+                                min="1"
+                                max="10"
+                                value="10"
+                                aria-label="Maximum rating" />
+                        </label>
+                    </div>
+
+                    <!-- APPLY BUTTON -->
+                    <button
+                        type="button"
+                        id="applyRatingFilter"
+                        class="filter__apply-button">
+                        Apply
+                    </button>
+                </section>
+            </aside>
+
+            <!-- ===== MAIN DISPLAY AREA ===== -->
+            <main class="main-content">
+                <!-- Top row: Sale Ad, New Release, Best Selling -->
+                <section class="cards cards--top">
+                    <div class="card card--large">
+                        <h3 class="card__title">Sale Ad</h3>
+                        <div class="card__content">
+                            <!-- Replace with actual slideshow or image carousel -->
+                            <div class="slideshow-placeholder">[ Slideshow Here
+                                ]</div>
+                        </div>
+                    </div>
+
+                    <div class="card card--large">
+                        <h3 class="card__title">New Release</h3>
+                        <div class="card__content">
+                            <!-- Replace with actual content -->
+                            <div class="slideshow-placeholder">[ New Release
+                                Banner ]</div>
+                        </div>
+                    </div>
+
+                    <div class="card card--large">
+                        <h3 class="card__title">Best Selling</h3>
+                        <div class="card__content">
+                            <!-- Replace with actual content -->
+                            <div class="slideshow-placeholder">[ Best Selling
+                                Banner ]</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- "Games Tailored to Your Taste" Carousel + Reviews -->
+                <section class="tailored-section">
+                    <h2 class="section-title">Games Tailored to Your Taste</h2>
+                    <div class="tailored">
+                        <!-- LEFT COLUMN: the poster + overlaid controls -->
+                        <div class="tailored__carousel">
+                            <div class="game-display">
+                                <a href="#" class="game-display__link">
+                                    <!-- href placeholder-->
+                                    <img
+                                        src="images/game-poster.png"
+                                        alt="Game Poster"
+                                        class="game-display__poster" />
+                                </a>
+                                <div class="game-display__controls">
+                                    <button
+                                        class="game-display__nav game-display__nav--prev"
+                                        aria-label="Previous game">◀</button>
+                                    <div
+                                        class="game-display__price">$19.99</div>
+                                    <button
+                                        class="game-display__nav game-display__nav--next"
+                                        aria-label="Next game">▶</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN: community reviews -->
+                        <div class="tailored__reviews">
+                            <h3 class="reviews__heading">Community Reviews</h3>
+
+                            <div class="reviews-container">
+                                <!-- Prev button -->
+                                <button class="reviews-nav reviews-nav--prev"
+                                    aria-label="Previous review">
+                                    ◀
+                                </button>
+
+                                <!-- The “window” showing one review at a time -->
+                                <div class="reviews-slides-wrapper">
+                                    <div class="reviews-slides">
+                                        <div class="review">
+                                            <p class="review__text">“Amazing
+                                                gameplay and story!”</p>
+                                            <p class="review__score">9/10</p>
+                                        </div>
+                                        <div class="review">
+                                            <p class="review__text">“Loved the
+                                                graphics.”</p>
+                                            <p class="review__score">8/10</p>
+                                        </div>
+                                        <div class="review">
+                                            <p class="review__text">“A must‐play
+                                                for fans.”</p>
+                                            <p class="review__score">9/10</p>
+                                        </div>
+                                        <!-- Add as many .review cards as you like -->
+                                    </div>
+                                </div>
+
+                                <!-- Next button -->
+                                <button class="reviews-nav reviews-nav--next"
+                                    aria-label="Next review">
+                                    ▶
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => 
+                    {
+                        // -- FIND ELEMENTS --
+                        const slidesContainer = document.querySelector('.reviews-slides');
+                        const slides = document.querySelectorAll('.reviews-slides .review');
+                        const prevBtn = document.querySelector('.reviews-nav--prev');
+                        const nextBtn = document.querySelector('.reviews-nav--next');
+
+                        let currentIndex = 0;
+                        const totalSlides = slides.length;
+
+                        // Update button disabled state (if you want to disable at ends)
+                        function updateNavButtons() 
+                        {
+                            // Optional: disable the “prev” button on the first slide
+                            if (currentIndex === 0) 
+                            {
+                                prevBtn.disabled = true;
+                            }else 
+                            {
+                                prevBtn.disabled = false;
+                            }
+                            // Optional: disable the “next” button on the last slide
+                            if (currentIndex === totalSlides - 1) 
+                            {
+                                nextBtn.disabled = true;
+                            }else 
+                            {
+                                nextBtn.disabled = false;
+                            }
+                        }
+
+                        // Move to a particular slide index
+                        function goToSlide(index) 
+                        {
+                            // Clamp index between 0 and totalSlides - 1
+                            if (index < 0)
+                            {
+                                index = 0;
+                            }
+                            if (index > totalSlides - 1)
+                            {
+                                index = totalSlides - 1;
+                            }
+                            currentIndex = index;
+                            const offset = -currentIndex * 100; // each slide is 100% width
+                            slidesContainer.style.transform = `translateX(${offset}%)`;
+                            updateNavButtons();
+                        }
+
+                        // EVENTS: arrow clicks
+                        prevBtn.addEventListener('click', () => 
+                        {
+                            goToSlide(currentIndex - 1);
+                        });
+                        nextBtn.addEventListener('click', () => 
+                        {
+                            goToSlide(currentIndex + 1);
+                        });
+
+                        // INITIALIZE
+                        goToSlide(0);
+                    });
+                </script>
+
+                <!-- Bundles Section -->
+                <section class="bundles-section">
+                    <h2 class="section-title">Bundles</h2>
+                    <div class="bundles">
+                        <!-- Example bundle cards; repeat as necessary -->
+                        <div class="bundle-card">
+                            <div class="bundle-card__image">
+                                <img
+                                    src="images/game-poster.png"
+                                    alt="Bundle Image" />
+                            </div>
+                            <h3 class="bundle-card__name">Bundle Name</h3>
+                        </div>
+
+                        <div class="bundle-card">
+                            <div class="bundle-card__image">
+                                <img
+                                    src="images/game-poster.png"
+                                    alt="Bundle Image" />
+                            </div>
+                            <h3 class="bundle-card__name">Bundle Name</h3>
+                        </div>
+
+                        <div class="bundle-card">
+                            <div class="bundle-card__image">
+                                <img
+                                    src="images/game-poster.png"
+                                    alt="Bundle Image" />
+                            </div>
+                            <h3 class="bundle-card__name">Bundle Name</h3>
+                        </div>
+                        <!-- Add more cards as needed -->
+                    </div>
+                    <div class="bundles__view-more">
+                        <button class="button button--primary">View
+                            More</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- =========================
+       FOOTER (optional)
+       ========================= -->
+        <footer class="footer">
+            <p>© 2025 Game Store. All rights reserved.</p>
+        </footer>
+        <!-- =========================
+       NOTIFICATION DROPDOWN SCRIPT
+       ========================= -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => 
+            {
+                const notifBtn = document.getElementById('notifBtn');
+                const notifDropdown = document.getElementById('notifDropdown');
+
+                // Toggle dropdown on bell-button click
+                notifBtn.addEventListener('click', (e) => 
+                {
+                    e.stopPropagation(); // Prevent the click from closing immediately
+                    notifDropdown.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking anywhere outside
+                document.addEventListener('click', (e) => 
+                {
+                    if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) 
+                    {
+                        notifDropdown.classList.remove('show');
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -552,7 +552,7 @@ export const data = {
             "wishlist": false,
             "bestSelling": false,
             "rating": 4.4,
-            "images": ["images/dreamscape.jpg","images/empire_tactics.jpg"],
+            "images": ["images/dreamscape.jpg"],
             "description": "Explore a hand-painted dream world in this atmospheric journey.",
             "systemRequirements": "Windows 10, 6GB RAM",
             "timer": false,
@@ -657,7 +657,6 @@ export const data = {
             "id": "bundle1",
             "name": "Strategy Pack",
             "isBundle": true,
-            "isSale": false, // discount > 0
             "platform": "PC",
             "wishlist": false,
             "rating": 4.8,
@@ -669,7 +668,7 @@ export const data = {
                 { "price": 20, "gamesIncluded": ["Strategy Game for PC", "Empire Tactics", "Tactical Conquest"] },
                 { "price": 30, "gamesIncluded": ["Strategy Game for PC", "Empire Tactics", "Tactical Conquest", "Galaxy Front", "World War Sim"] }
             ],
-            "discount": 0,
+            "discount": 50,
             "discountTime": "2025-06-07T23:59:59",
             "timer": true,
             "communityReview": "Amazing value for strategy lovers.",
@@ -684,7 +683,6 @@ export const data = {
             "id": "bundle2",
             "name": "Horror Collection",
             "isBundle": true,
-            "isSale": true, // discount > 0
             "platform": "PS",
             "wishlist": false,
             "rating": 4.7,
@@ -711,34 +709,6 @@ export const data = {
             "id": "bundle3",
             "name": "Indie Gems",
             "isBundle": true,
-            "isSale": true, // discount > 0
-            "platform": "PC",
-            "wishlist": false,
-            "rating": 4.5,
-            "description": "A curated selection of indie games for PC.",
-            "images": ["images/indiebundle.jpg"],
-            "basePrice": 25, // Use the highest tier price as the base
-            "tiers": [
-                { "price": 5, "gamesIncluded": ["Bard's Quest"] },
-                { "price": 15, "gamesIncluded": ["Bard's Quest", "Dreamscape", "Loop Architect"] },
-                { "price": 25, "gamesIncluded": ["Bard's Quest", "Dreamscape", "Loop Architect", "Ink Blade", "Wanderlight"] }
-            ],
-            "discount": 60,
-            "discountTime": "2025-06-09T23:59:59",
-            "timer": true,
-            "communityReview": "Hidden gems worth every penny.",
-            "userReviews": [
-                { "user": "IndieLover", "stars": 5, "text": "Amazing indie titles!" },
-                { "user": "GamerX", "stars": 4, "text": "Really fun games." }
-            ],
-            "steamReview": 87,
-            "isNew": true
-        },
-        {
-            "id": "bundle4",
-            "name": "Indie Gems",
-            "isBundle": true,
-            "isSale": true, // discount > 0
             "platform": "PC",
             "wishlist": false,
             "rating": 4.5,

@@ -9,7 +9,14 @@
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
         .navbar img { height: 40px; }
-        .navbar .icons { display: flex; gap: 15px; }
+        .navbar .icons { display: flex; gap: 15px; align-items: center; }
+        .search-container { position: relative; }
+        .search-container input { padding: 5px; width: 200px; }
+        .search-results { position: absolute; top: 100%; left: 0; width: 200px; background: white; border: none; max-height: 200px; overflow-y: auto; display: none; z-index: 10; }
+        .search-results div { padding: 5px; cursor: pointer; }
+        .search-results div:hover { background: #f0f0f0; }
+        .search-results .no-matches { color: #888; cursor: default; }
+        .search-results .no-matches:hover { background: none; }
         .container { display: flex; min-height: calc(100vh - 60px); }
         .sidebar { width: 250px; padding: 20px; background: #f0f0f0; position: fixed; height: 100%; overflow-y: auto; }
         .sidebar h3 { font-size: 18px; margin-bottom: 10px; }
@@ -35,7 +42,10 @@
             <img src="logo.png" alt="Logo">
         </a>
         <div class="icons">
-            <span>🔍</span>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search games...">
+                <div class="search-results" id="search-results"></div>
+            </div>
             <span>🔔</span>
             <span>👤</span>
         </div>
@@ -78,6 +88,8 @@
                     <option value="topDiscount">Top Discount</option>
                     <option value="alphabetical">Alphabetical</option>
                     <option value="bestSeller">Best Seller</option>
+                    <option value="newItems">New Items First</option>
+                    <option value="bestRating">Best Rating First</option>
                 </select>
             </div>
             <div class="game-grid" id="game-grid"></div>
@@ -86,6 +98,8 @@
     <script type="module">
         import { data } from './data.js';
 
+        const searchBar = document.getElementById('search-bar');
+        const searchResults = document.getElementById('search-results');
         const gameGrid = document.getElementById('game-grid');
         const sortSelect = document.getElementById('sort-select');
         const filterCategories = document.querySelectorAll('.filter-category');
@@ -93,23 +107,88 @@
         const filterGenres = document.querySelectorAll('.filter-genre');
         const filterPlatforms = document.querySelectorAll('.filter-platform');
 
+        // Search bar functionality
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase();
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+
+            if (query) {
+                const matches = data.games.filter(game => game.name.toLowerCase().includes(query));
+                if (matches.length > 0) {
+                    matches.forEach(game => {
+                        const result = document.createElement('div');
+                        result.textContent = game.name;
+                        result.addEventListener('click', () => {
+                            window.location.href = `game.html?id=${game.id}`;
+                        });
+                        searchResults.appendChild(result);
+                    });
+                    searchResults.style.display = 'block';
+                } else {
+                    const noMatches = document.createElement('div');
+                    noMatches.className = 'no-matches';
+                    noMatches.textContent = 'No matches';
+                    searchResults.appendChild(noMatches);
+                    searchResults.style.display = 'block';
+                }
+            }
+        });
+
+        searchBar.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchResults.style.display = 'none';
+            }, 200);
+        });
+
+        searchBar.addEventListener('focus', () => {
+            if (searchBar.value) {
+                searchResults.style.display = 'block';
+            }
+        });
+
+        // Make price checkboxes mutually exclusive
+        filterPrices.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    filterPrices.forEach(cb => {
+                        if (cb !== checkbox) cb.checked = false;
+                    });
+                }
+                renderItems();
+            });
+        });
+
         // Parse URL parameters to pre-apply filters
         const urlParams = new URLSearchParams(window.location.search);
         const categories = urlParams.getAll('category');
         const excludeCategories = urlParams.getAll('exclude');
+        const price = urlParams.get('price');
+        const genres = urlParams.getAll('genre');
+        const platforms = urlParams.getAll('platform');
         const sortBy = urlParams.get('sort');
 
-        // Apply initial filters from URL, default to no categories checked
+        // Apply initial filters from URL
         filterCategories.forEach(cb => {
-            cb.checked = false; // Uncheck all by default
+            cb.checked = false;
             if (categories.includes(cb.value)) cb.checked = true;
             if (excludeCategories.includes(cb.value)) cb.checked = false;
         });
 
-        // If no categories are explicitly selected, don't default to "Games"
-        if (categories.length === 0 && excludeCategories.length === 0) {
-            filterCategories.forEach(cb => cb.checked = false);
-        }
+        filterPrices.forEach(cb => {
+            cb.checked = false;
+            if (price === cb.value) cb.checked = true;
+        });
+
+        filterGenres.forEach(cb => {
+            cb.checked = false;
+            if (genres.includes(cb.value)) cb.checked = true;
+        });
+
+        filterPlatforms.forEach(cb => {
+            cb.checked = false;
+            if (platforms.includes(cb.value)) cb.checked = true;
+        });
 
         if (sortBy) sortSelect.value = sortBy;
 
@@ -119,28 +198,29 @@
             const selectedGenres = Array.from(filterGenres).filter(cb => cb.checked).map(cb => cb.value);
             const selectedPlatforms = Array.from(filterPlatforms).filter(cb => cb.checked).map(cb => cb.value);
 
-            let items = [];
-            if (selectedCategories.includes('Games')) {
-                items = items.concat(data.games);
-            }
-            if (selectedCategories.includes('Bundles')) {
-                items = items.concat(data.bundles);
-            }
-            // If no categories are selected, show nothing unless specified
-            if (selectedCategories.length === 0) {
-                items = [];
+            // Start with all items
+            let items = [...data.games, ...data.bundles];
+
+            // Apply "Games" and "Bundles" filters if selected
+            const hasGamesFilter = selectedCategories.includes('Games');
+            const hasBundlesFilter = selectedCategories.includes('Bundles');
+            if (hasGamesFilter || hasBundlesFilter) {
+                items = items.filter(item => 
+                    (hasGamesFilter && !item.isBundle) || (hasBundlesFilter && item.isBundle)
+                );
             }
 
+            // Apply "On Sale" filter if selected
+            if (selectedCategories.includes('On Sale')) {
+                items = items.filter(item => item.isSale);
+            }
+
+            // Apply additional filters
             return items.filter(item => {
                 const price = item.isBundle ? item.basePrice : item.price;
                 const discountedPrice = item.discount ? price * (1 - item.discount / 100) : price;
 
-                const matchesCategory = selectedCategories.length === 0 || 
-                    (selectedCategories.includes('On Sale') && item.isSale) || 
-                    (selectedCategories.includes('New') && item.isNew) || 
-                    (selectedCategories.includes('Games') && !item.isBundle) || 
-                    (selectedCategories.includes('Bundles') && item.isBundle);
-
+                // Apply price filter
                 const matchesPrice = selectedPrices.length === 0 || selectedPrices.some(range => {
                     if (range === 'u10') return discountedPrice < 10;
                     if (range === 'u20') return discountedPrice < 20;
@@ -149,8 +229,10 @@
                     return true;
                 });
 
+                // Apply genre filter
                 const matchesGenre = selectedGenres.length === 0 || selectedGenres.includes(item.genre);
 
+                // Apply platform filter
                 const matchesPlatform = selectedPlatforms.length === 0 || selectedPlatforms.some(p => {
                     if (p === 'Windows') return item.platform === 'PC' || item.platform === 'Web';
                     if (p === 'Nintendo') return item.platform === 'Switch';
@@ -158,7 +240,7 @@
                     return item.platform === p;
                 });
 
-                return matchesCategory && matchesPrice && matchesGenre && matchesPlatform;
+                return matchesPrice && matchesGenre && matchesPlatform;
             });
         }
 
@@ -168,6 +250,8 @@
                 if (sortBy === 'alphabetical') return a.name.localeCompare(b.name);
                 if (sortBy === 'bestSeller') return (b.bestSelling ? 1 : 0) - (a.bestSelling ? 1 : 0);
                 if (sortBy === 'topDiscount') return (b.discount || 0) - (a.discount || 0);
+                if (sortBy === 'newItems') return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
+                if (sortBy === 'bestRating') return b.rating - a.rating;
                 return 0;
             });
         }
