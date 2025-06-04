@@ -152,7 +152,7 @@
         .navbar__action-btn svg {
             width: 20px;
             height: 20px;
-            fill: var(--color-white); /* Changed to white */
+            fill: var(--color-white);
         }
 
         /* Layout: Sidebar + Main Content */
@@ -250,6 +250,22 @@
 
         .cards--top {
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Specific styles for Top Cards section */
+        .top-cards .card {
+            height: auto; /* Ensure card height adjusts to content */
+        }
+
+        .top-cards .card__content {
+            padding: 0; /* Remove padding to fit larger image */
+        }
+
+        .top-cards .card__content img {
+            width: 500px; /* Set width to 100px */
+            height: 250px; /* Set height to 500px */
+            object-fit: cover;
+            border-radius: 0; /* Remove radius to fit card borders */
         }
 
         /* Three-column layout for the columns section */
@@ -646,20 +662,20 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- Top Cards -->
-            <section class="cards cards--top">
+            <section class="cards cards--top top-cards">
                 <div class="card card--large">
-                    <h3 class="card__title">Sale Ad</h3>
+                    <h3 class="card__title">On Sale</h3>
                     <div class="card__content">
                         <a href="store.html?category=On Sale">
-                            <img src="sale_ad.jpg" alt="Sale Ad">
+                            <img src="images/gamesonsale.jpeg" alt="Sale Ad">
                         </a>
                     </div>
                 </div>
                 <div class="card card--large">
-                    <h3 class="card__title">New Release</h3>
+                    <h3 class="card__title">New Releases</h3>
                     <div class="card__content">
-                        <a href="store.html?category=New">
-                            <img src="new_release.jpg" alt="New Release">
+                        <a href="store.html?sort=newItems">
+                            <img src="images/newrelease.jpg" alt="New Items First">
                         </a>
                     </div>
                 </div>
@@ -667,7 +683,7 @@
                     <h3 class="card__title">Best Selling</h3>
                     <div class="card__content">
                         <a href="store.html?sort=bestSeller">
-                            <img src="best_selling.jpg" alt="Best Selling">
+                            <img src="images/bestselling.png" alt="Best Selling">
                         </a>
                     </div>
                 </div>
@@ -791,7 +807,7 @@
 
             <!-- Similar Games Section -->
             <section class="bundles-section">
-                <h2 class="section-title">Similar Games</h2>
+                <h2 class="section-title">Games</h2>
                 <div class="bundles">
                     <div class="bundle-card">
                         <a href="game.html?id=game10">

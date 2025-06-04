@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundle Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
+        .navbar img { height: 40px; }
+        .navbar .icons { display: flex; gap: 15px; }
+        .container { padding: 20px; }
+        .tier-buttons { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .tier-buttons button { padding: 10px 20px; border: 1px solid #ccc; cursor: pointer; }
+        .tier-buttons button.active { background: #facc15; font-weight: bold; }
+        .games-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .game-card { border: 1px solid #ddd; padding: 10px; background: white; }
+        .game-card img { width: 100%; height: 150px; object-fit: cover; }
+        .game-card .stars { color: gold; }
+        .actions { display: flex; gap: 10px; margin: 20px 0; }
+        .comments .comment { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+        .wishlist-btn.active { color: gold; } */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
+        .navbar img { height: 40px; }
+        .navbar .icons { display: flex; gap: 15px; }
+        .container { padding: 20px; }
+
+        .tier-buttons { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .tier-buttons button {
+            padding: 10px 20px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .tier-buttons button:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-1px);
+        }
+        .tier-buttons button.active {
+            background-color: #fde68a;
+            border-color: #f59e0b;
+            font-weight: bold;
+            color: #92400e;
+        }
+
+        .games-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .game-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .game-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: scale(1.02);
+        }
+        .game-card h4 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .game-card .stars {
+            color: #facc15;
+            font-size: 14px;
+        }
+
+        .actions { display: flex; gap: 10px; margin: 20px 0; }
+        .actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background-color: #10b981;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .actions button:hover {
+            background-color: #059669;
+        }
+
+        .wishlist-btn { color: #4b5563; transition: color 0.2s; }
+        .wishlist-btn.active { color: #facc15; font-weight: bold; }
+
+        .comments .comment {
+            border: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+        .comments .comment strong { color: #374151; }
+
+        .mt-6 button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .mt-6 button:hover {
+            background-color: #2563eb;
+        }
+
+        #bundle-description {
+            border: 1px solid #d1d5db;
+            background-color: #f3f4f6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #111827;
+            margin-top: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a href="index.html"><img src="logo.png" alt="Logo"></a>
+    <div class="icons">
+        <span>🔍</span>
+        <span>🔔</span>
+        <span>👤</span>
+    </div>
+</div>
+<div class="container">
+    <div class="tier-buttons" id="tier-buttons"></div>
+    <div class="games-list" id="games-list"></div>
+
+    <div class="actions">
+        <button id="add-to-cart">Add to Cart</button>
+        <button id="wishlist-btn" class="wishlist-btn">Add to Wishlist</button>
+        <span id="steam-review" class="ml-4"></span>
+    </div>
+
+    <div>
+        <h2>Introduce of game</h2>
+        <p id="bundle-description"></p>
+    </div>
+
+    <div>
+        <h2>Comments</h2>
+        <div class="comments" id="bundle-comments"></div>
+    </div>
+
+    <div class="mt-6">
+        <button class="px-4 py-2 border">SHARE BUNDLES WITH YOUR FRIENDS</button>
+        <span class="ml-4">18.1k shares</span>
+    </div>
+</div>
+
+<script type="module">
+    import { data } from './data.js';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const bundleId = urlParams.get('id') || 'bundle1';
+    const bundle = data.bundles.find(b => b.id === bundleId);
+
+    if (!bundle) {
+        document.querySelector('.container').innerHTML = '<p>Bundle not found.</p>';
+    } else {
+        const tierButtonsDiv = document.getElementById('tier-buttons');
+        const gamesListDiv = document.getElementById('games-list');
+        const description = document.getElementById('bundle-description');
+        const commentsDiv = document.getElementById('bundle-comments');
+        const steamReview = document.getElementById('steam-review');
+
+        description.textContent = bundle.description;
+        steamReview.textContent = `${bundle.steamReview}% positive`;
+
+        bundle.userReviews.forEach(review => {
+            const comment = document.createElement('div');
+            comment.className = 'comment';
+            comment.innerHTML = `<p><strong>${review.user}</strong>: ${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</p><p>${review.text}</p>`;
+            commentsDiv.appendChild(comment);
+        });
+
+        const genreType = bundle.name.toLowerCase().includes("strategy") ? "Strategy"
+                        : bundle.name.toLowerCase().includes("horror") ? "Horror"
+                        : bundle.name.toLowerCase().includes("indie") ? "Platformer"
+                        : null;
+
+        const availableGames = data.games.filter(g =>
+            !bundle.tiers.flatMap(t => t.gamesIncluded).includes(g.name)
+            && (!genreType || g.genre === genreType)
+        ).map(g => g.name);
+
+        while (bundle.tiers.length < 5) {
+            const lastTier = bundle.tiers[bundle.tiers.length - 1];
+            const newPrice = lastTier.price + 10;
+            const newGames = [...lastTier.gamesIncluded];
+
+            while (newGames.length < lastTier.gamesIncluded.length + 1 && availableGames.length > 0) {
+                newGames.push(availableGames.shift());
+            }
+
+            bundle.tiers.push({
+                price: newPrice,
+                gamesIncluded: newGames
+            });
+        }
+
+        let activeTier = 0;
+        function renderTiers() {
+            tierButtonsDiv.innerHTML = '';
+            bundle.tiers.forEach((tier, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = `CA$${tier.price.toFixed(2)}`;
+                btn.classList.toggle('active', index === activeTier);
+                btn.addEventListener('click', () => {
+                    activeTier = index;
+                    renderTiers();
+                    renderGames();
+                });
+                tierButtonsDiv.appendChild(btn);
+            });
+        }
+
+        function renderGames() {
+            gamesListDiv.innerHTML = '';
+            bundle.tiers[activeTier].gamesIncluded.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'game-card';
+                const match = data.games.find(g => g.name.includes(name));
+                const img = match ? match.images[0] : 'placeholder.jpg';
+                const rating = match ? Math.round(match.rating) : 0;
+                const gameId = match ? match.id : null;
+                div.innerHTML = `
+                    <a ${gameId ? `href="game.html?id=${gameId}"` : ''}>
+                        <img src="${img}" alt="${name}">
+                        <h4>${name}</h4>
+                        <div class="stars">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+                    </a>
+                `;
+                gamesListDiv.appendChild(div);
+            });
+        }
+
+        renderTiers();
+        renderGames();
+
+        document.getElementById('wishlist-btn').addEventListener('click', e => {
+            e.currentTarget.classList.toggle('active');
+        });
+
+        document.getElementById('add-to-cart').addEventListener('click', () => alert('Added to cart!'));
+    }
+</script>

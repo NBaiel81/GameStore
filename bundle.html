@@ -6,166 +6,427 @@
     <title>Bundle Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
-        .navbar img { height: 40px; }
-        .navbar .icons { display: flex; gap: 15px; align-items: center; }
-        .search-container { position: relative; }
-        .search-container input { padding: 5px; width: 200px; }
-        .search-results { position: absolute; top: 100%; left: 0; width: 200px; background: white; border: 1px solid #ddd; max-height: 200px; overflow-y: auto; display: none; z-index: 10; }
-        .search-results div { padding: 5px; cursor: pointer; }
-        .search-results div:hover { background: #f0f0f0; }
-        .search-results .no-matches { color: #888; cursor: default; }
-        .search-results .no-matches:hover { background: none; }
-        .container { padding: 20px; }
-        .header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
-        .header img { width: 200px; height: 200px; object-fit: cover; }
-        .header-info h1 { font-size: 28px; margin-bottom: 10px; }
-        .header-info p { margin: 5px 0; }
-        .price-tiers { margin: 20px 0; }
-        .price-tiers label { display: block; margin: 10px 0; }
-        .price-tiers input[type="radio"] { margin-right: 10px; }
-        .games-list { margin: 20px 0; }
-        .games-list ul { list-style: none; padding: 0; }
-        .games-list li { padding: 10px; border-bottom: 1px solid #ddd; }
-        .section { margin: 20px 0; }
-        .section h2 { font-size: 20px; margin-bottom: 10px; }
-        .comments .comment { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
-        .actions { display: flex; gap: 10px; margin: 20px 0; }
-        .actions button { padding: 10px 20px; cursor: pointer; }
-        .wishlist-btn.active { color: gold; }
+        /* Global Reset & Variables */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-primary: #db801d;      /* dark blue */
+            --color-secondary: #f09a20;    /* medium blue */
+            --color-accent: #facc15;       /* amber */
+            --color-gray-100: #f3f4f6;     /* light gray */
+            --color-gray-200: #e5e7eb;     /* gray */
+            --color-gray-700: #374151;     /* dark gray */
+            --color-white: #ffffff;
+            --color-black: #000000;        /* black */
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --radius: 4px;
+            --transition: 0.2s ease-in-out;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--color-gray-700);
+            background-color: var(--color-gray-100);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--color-black);
+            border-bottom: 1px solid var(--color-gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.75rem 1rem;
+        }
+
+        .navbar__inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar__logo img {
+            height: 40px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            margin: 0 1rem;
+        }
+
+        .search-container input {
+            padding: 0.35rem 0.5rem;
+            width: 100%;
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color var(--transition);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+        }
+
+        .search-results div {
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .search-results div:hover {
+            background: var(--color-gray-200);
+        }
+
+        .search-results .no-matches {
+            color: var(--color-gray-700);
+            cursor: default;
+        }
+
+        .search-results .no-matches:hover {
+            background: none;
+        }
+
+        .navbar__actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .navbar__action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem;
+            background: none;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition);
+        }
+
+        .navbar__action-btn:hover,
+        .navbar__action-btn:focus {
+            background-color: var(--color-gray-200);
+            outline: none;
+        }
+
+        .navbar__action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--color-white);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Tier Buttons */
+        .tier-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tier-buttons button {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition), color var(--transition);
+            text-decoration: none;
+            border: 1px solid var(--color-gray-200);
+            background-color: var(--color-white);
+            color: var(--color-gray-700);
+        }
+
+        .tier-buttons button:hover {
+            background-color: var(--color-gray-100);
+            color: var(--color-primary);
+        }
+
+        .tier-buttons button.active {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+            border-color: var(--color-secondary);
+        }
+
+        /* Games List */
+        .games-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .game-card {
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            background: var(--color-white);
+            padding: 0.75rem;
+            text-align: center;
+            transition: transform var(--transition);
+        }
+
+        .game-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .game-card h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0.5rem 0 0.25rem;
+            color: var(--color-gray-700);
+        }
+
+        .game-card .stars {
+            color: var(--color-accent);
+            font-size: 0.9rem;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            align-items: center;
+        }
+
+        .actions button {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition), color var(--transition);
+            text-decoration: none;
+            border: none;
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .actions button:hover {
+            background-color: var(--color-primary);
+        }
+
+        .wishlist-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: color var(--transition);
+            text-decoration: none;
+            border: 1px solid var(--color-gray-200);
+            background: none;
+            color: var(--color-gray-700);
+        }
+
+        .wishlist-btn.active {
+            color: var(--color-accent);
+        }
+
+        #steam-review {
+            font-size: 0.95rem;
+            color: var(--color-gray-700);
+        }
+
+        /* Bundle Description and Comments */
+        #bundle-description {
+            border: 1px solid var(--color-gray-200);
+            background-color: var(--color-gray-100);
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+        }
+
+        .comments .comment {
+            border: 1px solid var(--color-gray-200);
+            background-color: var(--color-white);
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comments .comment p {
+            font-size: 0.95rem;
+            color: var(--color-gray-700);
+        }
+
+        .comments .comment strong {
+            color: var(--color-gray-700);
+            font-weight: 600;
+        }
+
+        /* Share Button */
+        .mt-6 {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .mt-6 button {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition), color var(--transition);
+            text-decoration: none;
+            border: none;
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .mt-6 button:hover {
+            background-color: var(--color-primary);
+        }
+
+        .mt-6 span {
+            font-size: 0.95rem;
+            color: var(--color-gray-700);
+        }
+
+        /* Headings */
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin: 1rem 0 0.5rem;
+        }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
     <div class="navbar">
-        <a href="index.html">
-            <img src="images/gamestore.jpg" alt="Logo">
-        </a>
-        <div class="icons">
+        <div class="navbar__inner">
+            <a href="index.html" class="navbar__logo">
+                <img src="images/gamestore.jpg" alt="Logo">
+            </a>
             <div class="search-container">
                 <input type="text" id="search-bar" placeholder="Search games...">
                 <div class="search-results" id="search-results"></div>
             </div>
-            <span>🔔</span>
-            <span>👤</span>
+            <div class="navbar__actions">
+                <button class="navbar__action-btn" aria-label="View Cart" onclick="window.location.href='cart.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0021 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
+                <button class="navbar__action-btn" aria-label="View Profile" onclick="window.location.href='profile.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="container">
-        <div class="header">
-            <img id="bundle-image" src="" alt="Bundle Image">
-            <div class="header-info">
-                <h1 id="bundle-name"></h1>
-                <p>Platform: <span id="bundle-platform"></span></p>
-                <p>Rating: <span id="bundle-rating"></span></p>
-                <p>Steam Review: <span id="bundle-steam-review"></span>%</p>
-                <p id="bundle-discount"></p>
-                <p id="bundle-timer"></p>
+        <main class="main-content">
+            <div class="tier-buttons" id="tier-buttons"></div>
+            <div class="games-list" id="games-list"></div>
+
+            <div class="actions">
+                <button id="add-to-cart">Add to Cart</button>
+                <button id="wishlist-btn" class="wishlist-btn">Add to Wishlist</button>
+                <span id="steam-review"></span>
             </div>
-        </div>
 
-        <div class="price-tiers">
-            <h2>Choose Your Tier</h2>
-            <div id="tiers"></div>
-        </div>
+            <div>
+                <h2>Introduce of game</h2>
+                <p id="bundle-description"></p>
+            </div>
 
-        <div class="games-list">
-            <h2>Games Included</h2>
-            <ul id="games-included"></ul>
-        </div>
+            <div>
+                <h2>Comments</h2>
+                <div class="comments" id="bundle-comments"></div>
+            </div>
 
-        <div class="actions">
-            <button id="add-to-cart">Add to Cart</button>
-            <button id="wishlist-btn" class="wishlist-btn">Add to Wishlist</button>
-            <button id="share-btn">Share Bundle</button>
-        </div>
-
-        <div class="section">
-            <h2>Bundle Info</h2>
-            <p id="bundle-description"></p>
-            <p>Community Review: <span id="bundle-community-review"></span></p>
-        </div>
-
-        <div class="section">
-            <h2>Comments</h2>
-            <div class="comments" id="bundle-comments"></div>
-        </div>
+            <div class="mt-6">
+                <button>SHARE BUNDLES WITH YOUR FRIENDS</button>
+                <span>18.1k shares</span>
+            </div>
+        </main>
     </div>
 
     <script type="module">
         import { data } from './data.js';
 
-        const searchBar = document.getElementById('search-bar');
-        const searchResults = document.getElementById('search-results');
-
-        searchBar.addEventListener('input', () => {
-            const query = searchBar.value.toLowerCase();
-            searchResults.innerHTML = '';
-            searchResults.style.display = 'none';
-
-            if (query) {
-                const matches = data.games.filter(game => game.name.toLowerCase().includes(query));
-                if (matches.length > 0) {
-                    matches.forEach(game => {
-                        const result = document.createElement('div');
-                        result.textContent = game.name;
-                        result.addEventListener('click', () => {
-                            window.location.href = `game.html?id=${game.id}`;
-                        });
-                        searchResults.appendChild(result);
-                    });
-                    searchResults.style.display = 'block';
-                } else {
-                    const noMatches = document.createElement('div');
-                    noMatches.className = 'no-matches';
-                    noMatches.textContent = 'No matches';
-                    searchResults.appendChild(noMatches);
-                    searchResults.style.display = 'block';
-                }
-            }
-        });
-
-        searchBar.addEventListener('blur', () => {
-            setTimeout(() => {
-                searchResults.style.display = 'none';
-            }, 200);
-        });
-
-        searchBar.addEventListener('focus', () => {
-            if (searchBar.value) {
-                searchResults.style.display = 'block';
-            }
-        });
-
         const urlParams = new URLSearchParams(window.location.search);
-        const bundleId = urlParams.get('id') || 'bundle1'; // Default to first bundle if no ID
+        const bundleId = urlParams.get('id') || 'bundle1';
         const bundle = data.bundles.find(b => b.id === bundleId);
 
         if (!bundle) {
             document.querySelector('.container').innerHTML = '<p>Bundle not found.</p>';
         } else {
-            // Populate bundle details
-            document.getElementById('bundle-image').src = bundle.images[0];
-            document.getElementById('bundle-name').textContent = bundle.name;
-            document.getElementById('bundle-platform').textContent = bundle.platform;
-            document.getElementById('bundle-rating').textContent = '★'.repeat(Math.round(bundle.rating)) + '☆'.repeat(5 - Math.round(bundle.rating));
-            document.getElementById('bundle-steam-review').textContent = bundle.steamReview;
-            document.getElementById('bundle-description').textContent = bundle.description;
-            document.getElementById('bundle-community-review').textContent = bundle.communityReview;
-            document.getElementById('bundle-discount').textContent = `Discount: ${bundle.discount}%`;
-            if (bundle.timer) {
-                const endTime = new Date(bundle.discountTime);
-                const now = new Date('2025-06-03T22:12:00-05:00');
-                const timeLeft = endTime - now;
-                if (timeLeft > 0) {
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    document.getElementById('bundle-timer').textContent = `Time Left: ${days}d ${hours}h`;
-                }
-            }
-
-            // Populate comments
+            const tierButtonsDiv = document.getElementById('tier-buttons');
+            const gamesListDiv = document.getElementById('games-list');
+            const description = document.getElementById('bundle-description');
             const commentsDiv = document.getElementById('bundle-comments');
+            const steamReview = document.getElementById('steam-review');
+
+            description.textContent = bundle.description;
+            steamReview.textContent = `${bundle.steamReview}% positive`;
+
             bundle.userReviews.forEach(review => {
                 const comment = document.createElement('div');
                 comment.className = 'comment';
@@ -173,45 +434,75 @@
                 commentsDiv.appendChild(comment);
             });
 
-            // Populate price tiers
-            const tiersDiv = document.getElementById('tiers');
-            bundle.tiers.forEach((tier, index) => {
-                const label = document.createElement('label');
-                label.innerHTML = `<input type="radio" name="tier" value="${index}" ${index === 0 ? 'checked' : ''}> $${tier.price} - ${tier.gamesIncluded.length} games`;
-                tiersDiv.appendChild(label);
-            });
+            const genreType = bundle.name.toLowerCase().includes("strategy") ? "Strategy"
+                            : bundle.name.toLowerCase().includes("horror") ? "Horror"
+                            : bundle.name.toLowerCase().includes("indie") ? "Platformer"
+                            : null;
 
-            // Update games list based on selected tier
-            function updateGamesList() {
-                const selectedTierIndex = parseInt(document.querySelector('input[name="tier"]:checked').value);
-                const gamesList = document.getElementById('games-included');
-                gamesList.innerHTML = '';
-                bundle.tiers[selectedTierIndex].gamesIncluded.forEach(game => {
-                    const li = document.createElement('li');
-                    li.textContent = game;
-                    gamesList.appendChild(li);
+            const availableGames = data.games.filter(g =>
+                !bundle.tiers.flatMap(t => t.gamesIncluded).includes(g.name)
+                && (!genreType || g.genre === genreType)
+            ).map(g => g.name);
+
+            while (bundle.tiers.length < 5) {
+                const lastTier = bundle.tiers[bundle.tiers.length - 1];
+                const newPrice = lastTier.price + 10;
+                const newGames = [...lastTier.gamesIncluded];
+
+                while (newGames.length < lastTier.gamesIncluded.length + 1 && availableGames.length > 0) {
+                    newGames.push(availableGames.shift());
+                }
+
+                bundle.tiers.push({
+                    price: newPrice,
+                    gamesIncluded: newGames
                 });
             }
 
-            updateGamesList();
-            document.querySelectorAll('input[name="tier"]').forEach(radio => {
-                radio.addEventListener('change', updateGamesList);
+            let activeTier = 0;
+            function renderTiers() {
+                tierButtonsDiv.innerHTML = '';
+                bundle.tiers.forEach((tier, index) => {
+                    const btn = document.createElement('button');
+                    btn.textContent = `CA$${tier.price.toFixed(2)}`;
+                    btn.classList.toggle('active', index === activeTier);
+                    btn.addEventListener('click', () => {
+                        activeTier = index;
+                        renderTiers();
+                        renderGames();
+                    });
+                    tierButtonsDiv.appendChild(btn);
+                });
+            }
+
+            function renderGames() {
+                gamesListDiv.innerHTML = '';
+                bundle.tiers[activeTier].gamesIncluded.forEach(name => {
+                    const div = document.createElement('div');
+                    div.className = 'game-card';
+                    const match = data.games.find(g => g.name.includes(name));
+                    const img = match ? match.images[0] : 'placeholder.jpg';
+                    const rating = match ? Math.round(match.rating) : 0;
+                    const gameId = match ? match.id : null;
+                    div.innerHTML = `
+                        <a ${gameId ? `href="game.html?id=${gameId}"` : ''}>
+                            <img src="${img}" alt="${name}">
+                            <h4>${name}</h4>
+                            <div class="stars">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+                        </a>
+                    `;
+                    gamesListDiv.appendChild(div);
+                });
+            }
+
+            renderTiers();
+            renderGames();
+
+            document.getElementById('wishlist-btn').addEventListener('click', e => {
+                e.currentTarget.classList.toggle('active');
             });
 
-            // Wishlist button toggle (visual only)
-            const wishlistBtn = document.getElementById('wishlist-btn');
-            wishlistBtn.classList.toggle('active', bundle.wishlist);
-            wishlistBtn.addEventListener('click', () => {
-                wishlistBtn.classList.toggle('active');
-            });
-
-            // Add to cart and share (visual only)
-            document.getElementById('add-to-cart').addEventListener('click', () => {
-                alert('Added to cart!');
-            });
-            document.getElementById('share-btn').addEventListener('click', () => {
-                alert('Share link copied!');
-            });
+            document.getElementById('add-to-cart').addEventListener('click', () => alert('Added to cart!'));
         }
     </script>
 </body>
