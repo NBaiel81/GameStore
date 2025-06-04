@@ -411,6 +411,50 @@
     <script type="module">
         import { data } from './data.js';
 
+        // Search bar functionality (same as index.html)
+        const searchBar = document.getElementById('search-bar');
+        const searchResults = document.getElementById('search-results');
+
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase();
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+
+            if (query) {
+                const matches = data.games.filter(game => game.name.toLowerCase().includes(query));
+                if (matches.length > 0) {
+                    matches.forEach(game => {
+                        const result = document.createElement('div');
+                        result.textContent = game.name;
+                        result.addEventListener('click', () => {
+                            window.location.href = `game.html?id=${game.id}`;
+                        });
+                        searchResults.appendChild(result);
+                    });
+                    searchResults.style.display = 'block';
+                } else {
+                    const noMatches = document.createElement('div');
+                    noMatches.className = 'no-matches';
+                    noMatches.textContent = 'No matches';
+                    searchResults.appendChild(noMatches);
+                    searchResults.style.display = 'block';
+                }
+            }
+        });
+
+        searchBar.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchResults.style.display = 'none';
+            }, 200);
+        });
+
+        searchBar.addEventListener('focus', () => {
+            if (searchBar.value) {
+                searchResults.style.display = 'block';
+            }
+        });
+
+        // Existing bundle page functionality
         const urlParams = new URLSearchParams(window.location.search);
         const bundleId = urlParams.get('id') || 'bundle1';
         const bundle = data.bundles.find(b => b.id === bundleId);
