@@ -340,6 +340,7 @@
             font-weight: 600;
             color: var(--color-primary);
             margin-bottom: 1rem;
+            line-height: 1; /* Adjusted to align with button */
         }
 
         .tailored {
@@ -519,6 +520,73 @@
             border: 1px solid var(--color-gray-200);
             border-radius: var(--radius);
             padding: 1rem;
+            position: relative; /* For positioning the tooltip */
+        }
+
+        /* Bundles Header with Tooltip Button */
+        .bundles-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .bundles-header .section-title {
+            margin-bottom: 0; /* Remove margin to align with button */
+        }
+
+        .tooltip-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: var(--color-gray-200);
+            color: var(--color-gray-700);
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition);
+        }
+
+        .tooltip-btn:hover,
+        .tooltip-btn:focus {
+            background-color: var(--color-gray-100);
+            outline: none;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            top: 3rem; /* Below the heading */
+            left: 1rem;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--color-gray-700);
+            max-width: 300px;
+            z-index: 100;
+            display: none;
+        }
+
+        .tooltip.active {
+            display: block;
+        }
+
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-white);
+            border-top: 1px solid var(--color-gray-200);
+            border-left: 1px solid var(--color-gray-200);
+            transform: rotate(45deg);
         }
 
         .bundles {
@@ -773,7 +841,13 @@
 
             <!-- Bundles Section -->
             <section class="bundles-section">
-                <h2 class="section-title">Bundles</h2>
+                <div class="bundles-header">
+                    <h2 class="section-title">Bundles</h2>
+                    <button class="tooltip-btn" aria-label="What are bundles?">?</button>
+                    <div class="tooltip" id="bundles-tooltip">
+                        Discover new gaming experiences with our exclusive pay-what-you-want bundles. Each limited-time bundle features a hand-picked selection of popular titles and hidden gems—curated to deliver variety, excitement, and value. Pay whatever you like, and unlock more games by giving more. The more you give, the more you get!
+                    </div>
+                </div>
                 <div class="bundles">
                     <div class="bundle-card">
                         <a href="bundle.html?id=bundle1">
@@ -1087,6 +1161,21 @@
             });
 
             updateDisplay();
+
+            // Tooltip functionality for Bundles section
+            const tooltipBtn = document.querySelector('.tooltip-btn');
+            const tooltip = document.getElementById('bundles-tooltip');
+
+            tooltipBtn.addEventListener('click', () => {
+                tooltip.classList.toggle('active');
+            });
+
+            // Close tooltip when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!tooltipBtn.contains(e.target) && !tooltip.contains(e.target)) {
+                    tooltip.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>

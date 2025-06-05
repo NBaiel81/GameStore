@@ -648,7 +648,57 @@ export const data = {
             "userReviews": [],
             "steamReview": 85,
             "isNew": true
-          }
+          },
+          {
+            "id": "game50",
+            "name": "Strategy Game for Mac",
+            "isSale": true,
+            "isBundle": false,
+            "price": 30,
+            "discount": 50,
+            "discountTime": "2025-06-05T23:59:59",
+            "genre": "Strategy",
+            "platform": "Mac",
+            "wishlist": true,
+            "bestSelling": true,
+            "rating": 4.5,
+            "images": ["images/strategy01.jpg", "images/strategy02.jpg"],
+            "description": "A turn-based strategy game set in medieval times.",
+            "systemRequirements": "Windows 10, i5 CPU, 8GB RAM, GTX 1060",
+            "timer": true,
+            "communityReview": "Very engaging with challenging mechanics.",
+            "userReviews": [
+                {"user": "User1", "stars": 5, "text": "Awesome game!"},
+                {"user": "User2", "stars": 4, "text": "Good mechanics."}
+            ],
+            "steamReview": 92,
+            "isNew": true
+        },
+        {
+            "id": "game51",
+            "name": "FPS Game for PC",
+            "isSale": true,
+            "isBundle": false,
+            "price": 30,
+            "discount": 50,
+            "discountTime": "2025-06-05T23:59:59",
+            "genre": "FPS",
+            "platform": "PC",
+            "wishlist": true,
+            "bestSelling": true,
+            "rating": 4.5,
+            "images": ["images/strategy01.jpg", "images/strategy02.jpg"],
+            "description": "A turn-based strategy game set in medieval times.",
+            "systemRequirements": "Windows 10, i5 CPU, 8GB RAM, GTX 1060",
+            "timer": true,
+            "communityReview": "Very engaging with challenging mechanics.",
+            "userReviews": [
+                {"user": "User1", "stars": 5, "text": "Awesome game!"},
+                {"user": "User2", "stars": 4, "text": "Good mechanics."}
+            ],
+            "steamReview": 92,
+            "isNew": true
+        },
     ],
 
 
@@ -709,33 +759,6 @@ export const data = {
         },
         {
             "id": "bundle3",
-            "name": "Indie Gems",
-            "isBundle": true,
-            "isSale": true, // discount > 0
-            "platform": "PC",
-            "wishlist": false,
-            "rating": 4.5,
-            "description": "A curated selection of indie games for PC.",
-            "images": ["images/indiebundle.jpg"],
-            "basePrice": 25, // Use the highest tier price as the base
-            "tiers": [
-                { "price": 5, "gamesIncluded": ["Bard's Quest"] },
-                { "price": 15, "gamesIncluded": ["Bard's Quest", "Dreamscape", "Loop Architect"] },
-                { "price": 25, "gamesIncluded": ["Bard's Quest", "Dreamscape", "Loop Architect", "Ink Blade", "Wanderlight"] }
-            ],
-            "discount": 60,
-            "discountTime": "2025-06-09T23:59:59",
-            "timer": true,
-            "communityReview": "Hidden gems worth every penny.",
-            "userReviews": [
-                { "user": "IndieLover", "stars": 5, "text": "Amazing indie titles!" },
-                { "user": "GamerX", "stars": 4, "text": "Really fun games." }
-            ],
-            "steamReview": 87,
-            "isNew": true
-        },
-        {
-            "id": "bundle4",
             "name": "Indie Gems",
             "isBundle": true,
             "isSale": true, // discount > 0

@@ -246,45 +246,58 @@
             gap: 0.5rem;
             margin: 1rem 0;
             align-items: center;
+            flex-wrap: wrap;
         }
 
-        .actions button {
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             border-radius: var(--radius);
             cursor: pointer;
-            transition: background-color var(--transition), color var(--transition);
+            transition: background-color var(--transition);
             text-decoration: none;
             border: none;
             background-color: var(--color-secondary);
             color: var(--color-white);
+            width: 100%;
+            max-width: 200px;
         }
 
-        .actions button:hover {
+        .action-btn:hover {
             background-color: var(--color-primary);
         }
 
-        .wishlist-btn {
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
+        .action-btn.active::after {
+            content: '✔';
+            margin-left: 0.5rem;
+        }
+
+        .info-btn.steam-review {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             border-radius: var(--radius);
             cursor: pointer;
-            transition: color var(--transition);
+            transition: background-color var(--transition);
             text-decoration: none;
-            border: 1px solid var(--color-gray-200);
-            background: none;
-            color: var(--color-gray-700);
+            border: none;
+            background-color: var(--color-black);
+            color: var(--color-white);
+            width: 100%;
+            max-width: 200px;
         }
 
-        .wishlist-btn.active {
-            color: var(--color-accent);
-        }
-
-        #steam-review {
-            font-size: 0.95rem;
-            color: var(--color-gray-700);
+        .info-btn.steam-review .steam-logo {
+            width: 16px;
+            height: 16px;
+            fill: var(--color-white);
         }
 
         /* Bundle Description and Comments */
@@ -294,6 +307,58 @@
             border-radius: var(--radius);
             padding: 0.75rem;
             margin: 0.5rem 0;
+        }
+
+        .comments-section {
+            margin: 1rem 0;
+        }
+
+        .comments-form {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+        }
+
+        .comments-form h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .comments-form label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+            color: var(--color-gray-700);
+        }
+
+        .comments-form select,
+        .comments-form textarea {
+            width: 100%;
+            padding: 0.35rem 0.5rem;
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comments-form button {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color var(--transition);
+            border: none;
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .comments-form button:hover {
+            background-color: var(--color-primary);
         }
 
         .comments .comment {
@@ -382,13 +447,23 @@
     <!-- Main Content -->
     <div class="container">
         <main class="main-content">
+            <!-- Inside <main class="main-content"> -->
+            <h2 id="bundle-name" class="text-xl font-semibold text-gray-700 text-left"></h2>
             <div class="tier-buttons" id="tier-buttons"></div>
             <div class="games-list" id="games-list"></div>
 
+
+            <div class="games-list" id="games-list"></div>
+
             <div class="actions">
-                <button id="add-to-cart">Add to Cart</button>
-                <button id="wishlist-btn" class="wishlist-btn">Add to Wishlist</button>
-                <span id="steam-review"></span>
+                <button class="info-btn steam-review" id="bundle-steam-review">
+                    <span id="steam-text"></span>
+                    <svg class="steam-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm-2.5 5.5c-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5 3.5-1.567 3.5-3.5-1.567-3.5-3.5-3.5zm0 2c.827 0 1.5.673 1.5 1.5s-.673 1.5-1.5 1.5-1.5-.673-1.5-1.5.673-1.5 1.5-1.5zm6.5-2c-1.933 0-3.5 1.567-3.5 3.5 0 .614.16 1.188.438 1.688l-2.375 2.375c-.5-.278-1.073-.438-1.688-.438-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5 3.5-1.567 3.5-3.5c0-.615-.16-1.188-.438-1.688l2.375-2.375c.500 .278 1.073.438 1.688.438 1.933 0 3.5-1.567 3.5-3.5s-1.567-3.5-3.5-3.5zm0 2c.827 0 1.5.673 1.5 1.5s-.673 1.5-1.5 1.5-1.5-.673-1.5-1.5.673-1.5 1.5-1.5zm-7 7c-.827 0-1.5.673-1.5 1.5s.673 1.5 1.5 1.5 1.5-.673 1.5-1.5-.673-1.5-1.5-1.5z"/>
+                    </svg>
+                </button>
+                <button id="add-to-cart" class="action-btn">Add to Cart</button>
+                <button id="wishlist-btn" class="action-btn wishlist-btn">Add to Wishlist</button>
             </div>
 
             <div>
@@ -396,8 +471,24 @@
                 <p id="bundle-description"></p>
             </div>
 
-            <div>
-                <h2>Comments</h2>
+            <div class="section comments-section">
+                <h2>Comments & Ratings</h2>
+                <div class="comments-form">
+                    <h3>Add a Comment</h3>
+                    <form id="comment-form">
+                        <label for="comment-rating">Rating:</label>
+                        <select id="comment-rating" required>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                        <label for="comment-text">Comment:</label>
+                        <textarea id="comment-text" rows="3" required></textarea>
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
                 <div class="comments" id="bundle-comments"></div>
             </div>
 
@@ -411,7 +502,7 @@
     <script type="module">
         import { data } from './data.js';
 
-        // Search bar functionality (same as index.html)
+        // Search bar functionality
         const searchBar = document.getElementById('search-bar');
         const searchResults = document.getElementById('search-results');
 
@@ -454,28 +545,51 @@
             }
         });
 
-        // Existing bundle page functionality
-        const urlParams = new URLSearchParams(window.location.search);
-        const bundleId = urlParams.get('id') || 'bundle1';
-        const bundle = data.bundles.find(b => b.id === bundleId);
+        // Bundle page functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bundleId = urlParams.get('id') || 'bundle1';
+            const bundle = data.bundles.find(b => b.id === bundleId);
 
-        if (!bundle) {
-            document.querySelector('.container').innerHTML = '<p>Bundle not found.</p>';
-        } else {
+            if (!bundle) {
+                document.querySelector('.container').innerHTML = '<p>Bundle not found.</p>';
+                return;
+            }
+
             const tierButtonsDiv = document.getElementById('tier-buttons');
+            const bundleNameEl = document.getElementById('bundle-name');
+            bundleNameEl.textContent = bundle.name;
+
             const gamesListDiv = document.getElementById('games-list');
             const description = document.getElementById('bundle-description');
             const commentsDiv = document.getElementById('bundle-comments');
-            const steamReview = document.getElementById('steam-review');
+            const steamText = document.getElementById('steam-text');
 
             description.textContent = bundle.description;
-            steamReview.textContent = `${bundle.steamReview}% positive`;
+            steamText.textContent = `${bundle.steamReview}% Positive`;
 
+            // Populate comments
             bundle.userReviews.forEach(review => {
                 const comment = document.createElement('div');
                 comment.className = 'comment';
                 comment.innerHTML = `<p><strong>${review.user}</strong>: ${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</p><p>${review.text}</p>`;
                 commentsDiv.appendChild(comment);
+            });
+
+            // Comment form submission
+            const commentForm = document.getElementById('comment-form');
+            commentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const user = "NBaiel81";
+                const rating = parseInt(document.getElementById('comment-rating').value);
+                const text = document.getElementById('comment-text').value;
+
+                const comment = document.createElement('div');
+                comment.className = 'comment';
+                comment.innerHTML = `<p><strong>${user}</strong>: ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</p><p>${text}</p>`;
+                commentsDiv.prepend(comment);
+
+                commentForm.reset();
             });
 
             const genreType = bundle.name.toLowerCase().includes("strategy") ? "Strategy"
@@ -542,12 +656,23 @@
             renderTiers();
             renderGames();
 
-            document.getElementById('wishlist-btn').addEventListener('click', e => {
-                e.currentTarget.classList.toggle('active');
+            // Add to cart button
+            const addToCartBtn = document.getElementById('add-to-cart');
+            let cartAdded = false;
+            addToCartBtn.addEventListener('click', () => {
+                cartAdded = !cartAdded;
+                addToCartBtn.classList.toggle('active', cartAdded);
             });
 
-            document.getElementById('add-to-cart').addEventListener('click', () => alert('Added to cart!'));
-        }
+            // Wishlist button toggle
+            const wishlistBtn = document.getElementById('wishlist-btn');
+            let wishlistAdded = bundle.wishlist || false;
+            wishlistBtn.classList.toggle('active', wishlistAdded);
+            wishlistBtn.addEventListener('click', () => {
+                wishlistAdded = !wishlistAdded;
+                wishlistBtn.classList.toggle('active', wishlistAdded);
+            });
+        });
     </script>
 </body>
 </html>
