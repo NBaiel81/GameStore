@@ -478,6 +478,7 @@
                     <form id="comment-form">
                         <label for="comment-rating">Rating:</label>
                         <select id="comment-rating" required>
+                            <option value="" disabled selected>Select rating</option>
                             <option value="1">1 Star</option>
                             <option value="2">2 Stars</option>
                             <option value="3">3 Stars</option>
@@ -499,8 +500,10 @@
         </main>
     </div>
 
-    <script type="module">
-        import { data } from './data.js';
+    <script src="./data.js"></script>
+        <script>
+        const data = window.data;
+
 
         // Search bar functionality
         const searchBar = document.getElementById('search-bar');

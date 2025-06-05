@@ -248,9 +248,9 @@
             </div>
         </main>
 
-        <script type="module">
-            import { data } from './data.js';
-
+        <script src="./data.js"></script>
+            <script>
+            const data = window.data;
             // Search bar functionality
             const searchBar = document.getElementById('search-bar');
             const searchResults = document.getElementById('search-results');

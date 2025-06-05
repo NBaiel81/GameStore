@@ -385,9 +385,9 @@
         </div>
     </div>
 
-    <script type="module">
-        import { data } from './data.js';
-
+    <script src="./data.js"></script>
+    <script>
+        const data = window.data;
         const searchBar = document.getElementById('search-bar');
         const searchResults = document.getElementById('search-results');
         const gameGrid = document.getElementById('game-grid');

@@ -1,4 +1,4 @@
-export const data = {
+window.data = {
     "games": [
         {
             "id": "game0",
